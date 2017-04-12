@@ -1,5 +1,8 @@
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.annotation.ManagedBean;
@@ -29,6 +32,8 @@ public class Login implements Serializable {
     private String login;
     private String password;
     private UIInput loginUI;
+    private DBConnect dbConnect = new DBConnect();
+    private String setDestination;
 
     public UIInput getLoginUI() {
         return loginUI;
@@ -53,21 +58,50 @@ public class Login implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
+    
 
     public void validate(FacesContext context, UIComponent component, Object value)
             throws ValidatorException, SQLException {
         login = loginUI.getLocalValue().toString();
         password = value.toString();
+        setDestination = "";
+        Connection con = dbConnect.getConnection();
 
-        if (!((login.equals("lubo") && password.equals("secret")))) {
-            FacesMessage errorMessage = new FacesMessage("Wrong login/password");
-            throw new ValidatorException(errorMessage);
+        if (con == null) {
+           throw new SQLException("Can't get database connection");
         }
+
+        PreparedStatement ps
+                    = con.prepareStatement(
+                            "select title from Login where username=? and password=?");
+        ps.setString(1, login);
+        ps.setString(2, password);
+        ResultSet result = ps.executeQuery();
+        if (!result.next()) {
+            return;
+        }
+        String getTitle = result.getString(1);
+        
+        switch (getTitle) {
+            case "admin":
+                setDestination = getTitle;
+                break;
+            case "employee":
+                setDestination = getTitle;
+                break;
+            case "customer":
+                setDestination = getTitle;
+                break;
+            default:
+                FacesMessage errorMessage = new FacesMessage("Wrong login/password");
+                throw new ValidatorException(errorMessage);
+        }
+                
     }
 
     public String go() {
       //  Util.invalidateUserSession();
-        return "success";
+        return setDestination;
     }
 
 }
