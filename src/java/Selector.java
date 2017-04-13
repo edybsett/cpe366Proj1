@@ -24,7 +24,7 @@ public class Selector implements Serializable {
     public String[] getChoices() {
         return choices;
     }
-
+    // Here is a comment I made to test git stash
     public void setChoices(String[] choices) {
         this.choices = choices;
     }
