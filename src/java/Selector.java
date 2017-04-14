@@ -10,7 +10,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 /**
- *
+ * dsakdas kdsalkdal; k;lal;kadlksada;kk;lk
  * @author stanchev
  */
 @Named(value = "selector")
