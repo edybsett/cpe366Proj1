@@ -33,6 +33,7 @@ public class SpecialRates implements Serializable {
     private Date startDate;
     private Date endDate;
     private float priceChange;
+    private boolean hotelWide;
 
     public Integer getRmNum() {
         return rmNum;
@@ -65,6 +66,14 @@ public class SpecialRates implements Serializable {
     public void setPriceChange(float priceChange) {
         this.priceChange = priceChange;
     }
+
+    public boolean isHotelWide() {
+        return hotelWide;
+    }
+
+    public void setHotelWide(boolean hotelWide) {
+        this.hotelWide = hotelWide;
+    }
     
     public List<SpecialRates> getHotelWide() throws SQLException {
         Connection con = dbConnect.getConnection();
@@ -87,7 +96,7 @@ public class SpecialRates implements Serializable {
             rate.setStartDate(result.getDate("startDate"));
             rate.setEndDate(result.getDate("endDate"));
             rate.setPriceChange(result.getFloat("priceChange"));
-            
+            rate.setHotelWide(true);
             list.add(rate);
         }
         result.close();
@@ -117,7 +126,7 @@ public class SpecialRates implements Serializable {
             rate.setStartDate(result.getDate("startDate"));
             rate.setEndDate(result.getDate("endDate"));
             rate.setPriceChange(result.getFloat("priceChange"));
-            
+            rate.setHotelWide(false);
             list.add(rate);
         }
         result.close();
@@ -125,5 +134,68 @@ public class SpecialRates implements Serializable {
         return list;
     }
     
+    public String deleteSpecialRate() throws SQLException, ParseException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+
+        Statement statement = con.createStatement();
+        statement.executeUpdate("delete from SpecialRates where rmNum=" + rmNum + " and startDate=" 
+                +  new java.sql.Date(startDate.getTime()) + " and endDate=" + new java.sql.Date(endDate.getTime()));
+        statement.close();
+        con.commit();
+        con.close();
+        Util.invalidateUserSession();
+        return "main";
+    }
+    
+    public String addSpecialRate() throws SQLException, ParseException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+
+        Statement statement = con.createStatement();
+
+        PreparedStatement preparedStatement = con.prepareStatement("insert into SpecialRates(rmNum, startDate, endDate, hotelWide, priceChange) value (?,?,?,?,?)");
+        preparedStatement.setInt(1, rmNum);
+        preparedStatement.setDate(2, new java.sql.Date(startDate.getTime()));
+        preparedStatement.setDate(3, new java.sql.Date(endDate.getTime()));
+        preparedStatement.setBoolean(4, hotelWide);
+        preparedStatement.setFloat(5, priceChange);
+        preparedStatement.executeUpdate();
+        statement.close();
+        con.commit();
+        con.close();
+        Util.invalidateUserSession();
+        return "main";
+     
+    }
+    
+
+    
+    private boolean existsSpecialRate(int rm, Date start, Date end) throws SQLException {
+        Connection con = dbConnect.getConnection();
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+
+        PreparedStatement ps = con.prepareStatement("select * from SpecialRates where rmNum = " + rm + " and startDate = " + start + " and endDate = " + end);
+
+        ResultSet result = ps.executeQuery();
+        if (result.next()) {
+            result.close();
+            con.close();
+            return true;
+        }
+        result.close();
+        con.close();
+        return false;
+    }
     
 }
