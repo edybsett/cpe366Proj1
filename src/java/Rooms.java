@@ -90,7 +90,26 @@ public class Rooms {
             list.add(room);
         }
         result.close();
+        con.commit();
         con.close();
         return list;
+    }
+    
+    public String updatePrice() throws SQLException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+
+        PreparedStatement ps
+                = con.prepareStatement("update Room set price=? where rmnum=?");
+        ps.setFloat(1, basePrice);
+        ps.setInt(2, rmNum);
+        ResultSet result = ps.executeQuery();
+        result.close();
+        con.commit();
+        con.close();
+        return "refresh";
     }
 }

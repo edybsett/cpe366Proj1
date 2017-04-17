@@ -81,6 +81,9 @@ public class Login implements Serializable {
             return;
         }
         String getTitle = result.getString(1);
+        result.close();
+        con.commit();
+        con.close();
         
         switch (getTitle) {
             case "admin":
