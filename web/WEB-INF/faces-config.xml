@@ -21,12 +21,23 @@
             <property-name>login</property-name>
             <value>#{login}</value>
         </managed-property>
+        <managed-property>
+            <property-name>employeelist</property-name>
+            <value>
+               #{employeelist}
+            </value>
+        </managed-property>
     </managed-bean>    
     <managed-bean>
         <managed-bean-name>login</managed-bean-name>
         <managed-bean-class>Login</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>  
+    </managed-bean> 
+    <managed-bean>
+        <managed-bean-name>employeelist</managed-bean-name>
+        <managed-bean-class>EmployeeList</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean> 
     <navigation-rule>
         <from-view-id>
             /index.xhtml
@@ -37,7 +48,7 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>admin</from-outcome>
-            <to-view-id>/adminflow.xhtml</to-view-id>
+            <to-view-id>/showEmployee.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
             <from-outcome>employee</from-outcome>
@@ -46,6 +57,19 @@
         <navigation-case>
             <from-outcome>customer</from-outcome>
             <to-view-id>/customerflow.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>
+            /showEmployee.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome>addEmployee</from-outcome>
+            <to-view-id>/addEmployee.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>showEmployeeInfo</from-outcome>
+            <to-view-id>/employeeInfo.xhtml </to-view-id>
         </navigation-case>
     </navigation-rule> 
     <navigation-rule>
