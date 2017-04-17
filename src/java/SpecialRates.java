@@ -148,8 +148,8 @@ public class SpecialRates implements Serializable {
         statement.close();
         con.commit();
         con.close();
-        Util.invalidateUserSession();
-        return "main";
+        
+        return "refresh";
     }
     
     public String addSpecialRate() throws SQLException, ParseException {
@@ -163,17 +163,31 @@ public class SpecialRates implements Serializable {
         Statement statement = con.createStatement();
 
         PreparedStatement preparedStatement = con.prepareStatement("insert into SpecialRates(rmNum, startDate, endDate, hotelWide, priceChange) value (?,?,?,?,?)");
-        preparedStatement.setInt(1, rmNum);
-        preparedStatement.setDate(2, new java.sql.Date(startDate.getTime()));
-        preparedStatement.setDate(3, new java.sql.Date(endDate.getTime()));
-        preparedStatement.setBoolean(4, hotelWide);
-        preparedStatement.setFloat(5, priceChange);
-        preparedStatement.executeUpdate();
+        if (hotelWide == false) {
+            preparedStatement.setInt(1, rmNum);
+            preparedStatement.setDate(2, new java.sql.Date(startDate.getTime()));
+            preparedStatement.setDate(3, new java.sql.Date(endDate.getTime()));
+            preparedStatement.setBoolean(4, hotelWide);
+            preparedStatement.setFloat(5, priceChange);
+            preparedStatement.executeUpdate();
+            
+        }
+        else {
+            rmNum = 100;
+            for (int i = 0; i < 60; i++) {
+                int start = (int)i/12 * 100 + 101;
+                preparedStatement.setInt(1, start + (i % 12));
+                preparedStatement.setDate(2, new java.sql.Date(startDate.getTime()));
+                preparedStatement.setDate(3, new java.sql.Date(endDate.getTime()));
+                preparedStatement.setBoolean(4, hotelWide);
+                preparedStatement.setFloat(5, priceChange);
+                preparedStatement.executeUpdate();
+            }
+        }
         statement.close();
         con.commit();
         con.close();
-        Util.invalidateUserSession();
-        return "main";
+        return "refresh";
      
     }
     
