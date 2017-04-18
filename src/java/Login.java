@@ -82,7 +82,7 @@ public class Login implements Serializable {
         }
         String getTitle = result.getString(1);
         result.close();
-        con.commit();
+        
         con.close();
         
         switch (getTitle) {
