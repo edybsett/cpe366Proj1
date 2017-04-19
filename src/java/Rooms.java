@@ -65,7 +65,7 @@ public class Rooms {
         this.basePrice = basePrice;
     }
     
-    public List<Rooms> getSpecific() throws SQLException {
+    public List<Rooms> getRooms() throws SQLException {
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
