@@ -5,12 +5,88 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>Special Rates stuff</div>
-    </body>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <h1>Special Rates</h1>
+        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    
+    <h:body>
+        <h2>Hotel Wide Rate Increases</h2>
+        <h:dataTable value="#{specialRates.getHotelWide()}" var="hwr" border="1">
+            <h:column>
+                <f:facet name="header"> Start Date </f:facet>
+                    #{hwr.startDate}
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header"> End Date </f:facet>
+                    #{hwr.endDate}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header"> Price Change </f:facet>
+                    #{hwr.priceChange}
+            </h:column>             
+            
+        </h:dataTable>
+        
+        <br></br>
+        <h2> Specific Room Rate Increases </h2>
+        <h:dataTable value="#{specialRates.getSpecific()}" var="hs" border="1">
+            
+            <h:column>
+                <f:facet name="header"> Room Number</f:facet>
+                    #{hs.rmNum}
+            </h:column>
+            <h:column>
+                <f:facet name="header"> Start Date </f:facet>
+                    #{hs.startDate}
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header"> End Date </f:facet>
+                    #{hs.endDate}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header"> Price Change </f:facet>
+                    #{hs.priceChange}
+            </h:column>             
+            
+        </h:dataTable>
+        
+        <br></br>
+        <h2>All Rooms</h2>
+        <h:dataTable value="#{rooms.getRooms()}" var="r" border="1">
+            <h:column>
+                <f:facet name="header"> Room Number </f:facet>
+                    #{r.rmNum}
+            </h:column>
+            
+            <h:column>
+                <f:facet name="header"> View </f:facet>
+                    #{r.view}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header"> Bed Type </f:facet>
+                    #{r.bed}
+            </h:column>             
+
+            <h:column>
+                <f:facet name="header"> Base Price </f:facet>
+                    #{r.basePrice}
+            </h:column> 
+
+        </h:dataTable>
+        
+    </h:body>
+    
+    
+
+    
 </html>
