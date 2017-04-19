@@ -90,7 +90,6 @@ public class Rooms {
             list.add(room);
         }
         result.close();
-        con.commit();
         con.close();
         return list;
     }
