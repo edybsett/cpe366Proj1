@@ -21,12 +21,6 @@
             <property-name>login</property-name>
             <value>#{login}</value>
         </managed-property>
-        <managed-property>
-            <property-name>employeelist</property-name>
-            <value>
-               #{employeelist}
-            </value>
-        </managed-property>
     </managed-bean>    
     <managed-bean>
         <managed-bean-name>login</managed-bean-name>
@@ -38,6 +32,20 @@
         <managed-bean-class>Admin</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>specialRates</managed-bean-name>
+        <managed-bean-class>SpecialRates</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+        <managed-bean>
+        <managed-bean-name>rooms</managed-bean-name>
+        <managed-bean-class>Rooms</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    
+    
+    
       
     <navigation-rule>
         <from-view-id>
