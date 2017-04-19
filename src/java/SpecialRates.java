@@ -85,7 +85,7 @@ public class SpecialRates implements Serializable {
         PreparedStatement ps
                 = con.prepareStatement(
                         "select startDate, endDate, priceChange from SpecialRates where hotelWide=true");
-
+                           //"Select * from SpecialRates");
         //get customer data from database
         ResultSet result = ps.executeQuery();
 
