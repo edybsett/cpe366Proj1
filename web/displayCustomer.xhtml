@@ -1,14 +1,22 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
-    <title>Display Customer</title>
-    <h:head>
-        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
-        <h1>Customer</h1>
-    </h:head>
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
     <h:body>
-        <h:dataTable value="#{customer.getCustomer()}" var="c" border="1">
+        <ui:composition template="./template.xhtml">
+            <ui:define name="title">
+                <h1>Display Customer</h1>
+            </ui:define>
+        
+            <ui:define name="header">
+                <h1>Customer</h1>
+            </ui:define>
+            
+        <ui:define name="body">
+            <h:dataTable value="#{customer.getCustomer()}" var="c" border="1">
             <h:column>
                 <f:facet name="header"> Customer ID </f:facet>
                     #{c.customerID}
@@ -29,6 +37,9 @@
                     #{c.created_date}
             </h:column>
         </h:dataTable>
+        </ui:define>
+        </ui:composition>
     </h:body>
+
 </html>
 

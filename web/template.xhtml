@@ -7,25 +7,24 @@
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
-
-        <title><ui:insert name="title">Sample Title</ui:insert></title>
+        <title><ui:insert name="title">ACME Hotel</ui:insert></title>
     </h:head>
 
     <h:body>
         <div id ="header">
+            <ui:insert name="banner">
+                <img src="resources/common/banner.png" alt="ACME Hotel"/>
+            </ui:insert>
             <h1>
                 <ui:insert name="header">
-                    Sample Header
+                    <ui:include src="resources/common/commonHeader.xhtml"></ui:include>
                 </ui:insert>
             </h1>
         </div>
         <div id="mainContainer">
-            <div id="left" class="subContainer greyBox">
-                <ui:insert name="box">Sample Box Content</ui:insert>
-            </div>
-            <div id="right" class="subContainer">
-                <img src="duke.png" alt="Duke waving" />
-            </div>
+            <ui:insert name="body">
+                
+            </ui:insert>
         </div>
     </h:body>
 

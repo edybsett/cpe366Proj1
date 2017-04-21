@@ -5,12 +5,22 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>ADD EMPLOYEE PAGE</div>
-    </body>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    
+    <h:body>
+        <ui:composition template="./template.xhtml">
+        
+            <ui:define name="header">
+                <h1> Add New Employee </h1>
+            </ui:define>
+            
+        <ui:define name="body">
+            <h5>TODO</h5>
+        </ui:define>
+        </ui:composition>
+    </h:body>
 </html>

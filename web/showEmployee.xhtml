@@ -4,17 +4,22 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    <h:head>
-        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
-        <h1>SHOW EMPLOYEE LIST</h1>
-    </h:head>
+    
     <h:body>
-        <h:form>
+        <ui:composition template="./template.xhtml">
+           <ui:define name="header">
+                <h1>Show Employee List</h1>
+            </ui:define>
+            
+        <ui:define name="body">
+            <h:form>
             <h:panelGrid>
                 <h:commandButton value="Add Employee" action="#{admindirectory.addEmployee}"/>
                 <h:commandButton value="Show Info" action="#{admindirectory.showInfo}"/>
             </h:panelGrid>
             </h:form>
-
+        </ui:define>
+        </ui:composition>
     </h:body>
+
 </html>
