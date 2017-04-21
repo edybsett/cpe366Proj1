@@ -1,0 +1,37 @@
+select startDate, endDate, priceChange from SpecialRates where hotelWide=true
+
+select rmNum, startDate, endDate, priceChange from SpecialRates where hotelWide=false
+
+select * from Room
+
+insert into SpecialRates(rmNum, startDate, endDate, hotelWide, priceChange)
+value (?,?,?,?,?)
+
+delete from SpecialRates where rmNum=? and startDate=? and endDate=? 
+
+update Room set price=? where rmnum=? 
+
+select r.rmnum, r.startdate, r.enddate, s.startdate, s.enddate, r.pricechange 
+from specialrates r, specialrates s
+where r.startdate <= s.enddate and r.startdate >= s.startdate
+      and r.enddate >= s.startdate and r.enddate <= s.enddate
+      and r.rmnum = s.rmnum;
+
+select r.custid, r.roomid, s.startdate, s.enddate,
+       CASE WHEN r.startdate - s.enddate > 0 or r.enddate - s.startdate < 0
+              THEN 0
+            WHEN s.startdate - r.startdate > 0 and r.enddate - s.enddate > 0
+              THEN s.enddate - s.startdate + 1
+            WHEN r.startdate - s.startdate > 0 and s.enddate - r.enddate > 0
+              THEN r.enddate - r.startdate + 1
+            WHEN r.startdate - s.startdate > 0 and s.enddate - r.enddate < 0
+              THEN s.enddate - r.startdate + 1
+            WHEN s.startdate - r.startdate > 0 and r.enddate - s.enddate < 0
+              THEN r.enddate - s.startdate + 1    
+            END
+            as daysToApply,
+       r.enddate - r.startdate + 1 as totalDays,
+       s.enddate - s.startdate + 1 as totalIncreaseRateDays,
+       s.pricechange
+from reservation r, specialrates s
+where r.roomid = s.rmnum;
