@@ -7,13 +7,9 @@
     
     <h:body>
         <ui:composition template="./template.xhtml">
-            <ui:define name="title">
-                <h1>Display Customer</h1>
-            </ui:define>
+            <ui:define name="title">Display Customer</ui:define>
         
-            <ui:define name="header">
-                <h1>Customer</h1>
-            </ui:define>
+            <ui:define name="header">Customer</ui:define>
             
         <ui:define name="body">
             <h:dataTable value="#{customer.getCustomer()}" var="c" border="1">

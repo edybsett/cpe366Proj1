@@ -6,25 +6,35 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
+        <link href="css/stylesheet.css" type="text/css" rel="stylesheet"/>
         <title><ui:insert name="title">ACME Hotel</ui:insert></title>
     </h:head>
 
     <h:body>
-        <div id ="header">
+        <div id ="banner">
             <ui:insert name="banner">
-                <img src="resources/common/banner.png" alt="ACME Hotel"/>
+                <h:outputStylesheet name="css/stylesheet.css"/>
+                <div class="bannerContainer">
+                    <img src="resources/common/logo.png"/>
+                    <div class="bannerText">ACME Hotel</div>
+                    
+                </div>
             </ui:insert>
-            <h1>
-                <ui:insert name="header">
-                    <ui:include src="resources/common/commonHeader.xhtml"></ui:include>
-                </ui:insert>
-            </h1>
         </div>
+        <div id="header">
+            <div class="headerTitle">
+                <ui:insert name="header">
+                   Default Title
+                </ui:insert>
+            </div>
+        </div>
+        
         <div id="mainContainer">
+            <div class="main">
             <ui:insert name="body">
                 
             </ui:insert>
+        </div>
         </div>
     </h:body>
 
