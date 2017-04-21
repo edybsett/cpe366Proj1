@@ -84,6 +84,41 @@ and open the template in the editor.
 
         </h:dataTable>
         
+        <br></br>
+            <h:form>
+            <h:panelGrid columns="3">
+
+                Room Number: <h:inputText value="#{specialRates.rmNum}" required ="true"
+                                    requiredMessage="Your must enter room number"
+                                    binding="#{specialRates.UIrmNum}"
+                                    id="rmNum"/>
+                <h:message for="login" style="color:red;margin:8px;"/>
+
+                Start Date: <h:inputText value="#{specialRates.startDate}" required ="true"
+                                    requiredMessage="Your must enter start date"
+                                    binding="#{specialRates.UIstartDate}"
+                                    id="startDate"/>
+                <h:message for="login" style="color:red;margin:8px;"/>
+                
+                End Date: <h:inputText value="#{specialRates.endDate}" required ="true"
+                                    requiredMessage="Your must enter end date"
+                                    binding="#{specialRates.UIendDate}"
+                                    id="endDate"/>
+                <h:message for="login" style="color:red;margin:8px;"/>
+                
+                Price Change: <h:inputText value="#{specialRates.priceChange}" required ="true"
+                                    requiredMessage="Your must enter price change"
+                                     binding="#{specialRates.UIpriceChange}"
+                                    id="login"/>
+                <h:message for="login" style="color:red;margin:8px;"/>
+                
+
+            </h:panelGrid>
+            <h:panelGrid>
+                <h:commandButton value="Go" action="#{specialRates.addSpecialRate}"/>
+            </h:panelGrid>
+        </h:form>
+        
     </h:body>
     
     
