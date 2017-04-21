@@ -37,13 +37,14 @@ public class Customer implements Serializable {
     }
 
     private DBConnect dbConnect = new DBConnect();
-    private Integer customerID;
-    private String name;
+    private Integer cid;
+    private String firstName;
+    private String lastName;
     private String address;
-    private Date created_date;
+    private String email;
 
     public Integer getCustomerID() throws SQLException {
-        if (customerID == null) {
+        if (cid == null) {
             Connection con = dbConnect.getConnection();
 
             if (con == null) {
@@ -52,32 +53,35 @@ public class Customer implements Serializable {
 
             PreparedStatement ps
                     = con.prepareStatement(
-                            "select max(customer_id)+1 from customer");
+                            "select max(cid)+1 from customer");
             ResultSet result = ps.executeQuery();
             if (!result.next()) {
                 return null;
             }
-            customerID = result.getInt(1);
+            cid = result.getInt(1);
             result.close();
             con.close();
         }
-        return customerID;
+        return cid;
     }
 
     public void setCustomerID(Integer customerID) {
-        this.customerID = customerID;
+        this.cid = customerID;
     }
 
-    public String getName() {
-        // ELContext elContext = FacesContext.getCurrentInstance().getELContext();
-    //Login login = (Login) elContext.getELResolver().getValue(elContext, null, "login");
+    public String getFirstName() {
+           return firstName;
+    }
+    public void setFirstName(String name) {
+        this.firstName = name;
+    }
     
-      //  return login.getLogin();
-           return name;
+    public void setLastName(String name){
+        this.lastName = name;
     }
-
-    public void setName(String name) {
-        this.name = name;
+    
+    public String getLastName(){
+        return lastName;
     }
 
     public String getAddress() {
@@ -88,13 +92,12 @@ public class Customer implements Serializable {
         this.address = address;
     }
 
-    public Date getCreated_date() {
-        return created_date;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCreated_date(Date created_date) {
-        TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
-        this.created_date = created_date;
+    public void setEmail(String email){
+        this.email = email;
     }
 
     public String createCustomer() throws SQLException, ParseException {
@@ -107,11 +110,12 @@ public class Customer implements Serializable {
 
         Statement statement = con.createStatement();
 
-        PreparedStatement preparedStatement = con.prepareStatement("Insert into Customer values(?,?,?,?)");
-        preparedStatement.setInt(1, customerID);
-        preparedStatement.setString(2, name);
-        preparedStatement.setString(3, address);
-        preparedStatement.setDate(4, new java.sql.Date(created_date.getTime()));
+        PreparedStatement preparedStatement = con.prepareStatement("Insert into Customer values(?,?,?,?,?)");
+        preparedStatement.setInt(1, cid);
+        preparedStatement.setString(2, firstName);
+        preparedStatement.setString(3, firstName);
+        preparedStatement.setString(4, address);
+        preparedStatement.setString(5, email);
         preparedStatement.executeUpdate();
         statement.close();
         con.commit();
@@ -129,7 +133,7 @@ public class Customer implements Serializable {
         con.setAutoCommit(false);
 
         Statement statement = con.createStatement();
-        statement.executeUpdate("Delete from Customer where customer_id = " + customerID);
+        statement.executeUpdate("Delete from Customer where cid = " + cid);
         statement.close();
         con.commit();
         con.close();
@@ -150,16 +154,17 @@ public class Customer implements Serializable {
 
         PreparedStatement ps
                 = con.prepareStatement(
-                        "select * from customer where customer_id = " + customerID);
+                        "select * from customer where cid = " + cid);
 
         //get customer data from database
         ResultSet result = ps.executeQuery();
 
         result.next();
 
-        name = result.getString("name");
+        firstName = result.getString("firstName");
+        lastName = result.getString("lastName");
         address = result.getString("address");
-        created_date = result.getDate("created_date");
+        email = result.getString("email");
         return this;
     }
 
@@ -173,7 +178,7 @@ public class Customer implements Serializable {
 
         PreparedStatement ps
                 = con.prepareStatement(
-                        "select customer_id, name, address, created_date from customer order by customer_id");
+                        "select cid, firstName, lastName, address, email from customer order by cid");
 
         //get customer data from database
         ResultSet result = ps.executeQuery();
@@ -183,10 +188,11 @@ public class Customer implements Serializable {
         while (result.next()) {
             Customer cust = new Customer();
 
-            cust.setCustomerID(result.getInt("customer_id"));
-            cust.setName(result.getString("name"));
+            cust.setCustomerID(result.getInt("cid"));
+            cust.setFirstName(result.getString("firstName"));
+            cust.setLastName(result.getString("lastName"));
             cust.setAddress(result.getString("address"));
-            cust.setCreated_date(result.getDate("created_date"));
+            cust.setEmail(result.getString("email"));
 
             //store all data into a List
             list.add(cust);
@@ -224,7 +230,7 @@ public class Customer implements Serializable {
             throw new SQLException("Can't get database connection");
         }
 
-        PreparedStatement ps = con.prepareStatement("select * from customer where customer_id = " + id);
+        PreparedStatement ps = con.prepareStatement("select * from customer where cid = " + id);
 
         ResultSet result = ps.executeQuery();
         if (result.next()) {
