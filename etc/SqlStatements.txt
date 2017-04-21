@@ -35,3 +35,21 @@ select r.custid, r.roomid, s.startdate, s.enddate,
        s.pricechange
 from reservation r, specialrates s
 where r.roomid = s.rmnum;
+
+//Super easy table for comparing reservations to prices
+select r.resid, sum(
+       CASE WHEN r.startdate - s.enddate > 0 or r.enddate - s.startdate < 0
+              THEN 0
+            WHEN s.startdate - r.startdate > 0 and r.enddate - s.enddate > 0
+              THEN (s.enddate - s.startdate + 1) * s.pricechange
+            WHEN r.startdate - s.startdate > 0 and s.enddate - r.enddate > 0
+              THEN (r.enddate - r.startdate + 1) * s.pricechange
+            WHEN r.startdate - s.startdate > 0 and s.enddate - r.enddate < 0
+              THEN (s.enddate - r.startdate + 1) * s.pricechange
+            WHEN s.startdate - r.startdate > 0 and r.enddate - s.enddate < 0
+              THEN (r.enddate - s.startdate + 1) * s.pricechange   
+            END)
+            as priceToAdd
+from reservation r, specialrates s
+where r.roomid = s.rmnum
+group by r.resid;
