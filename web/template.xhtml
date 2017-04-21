@@ -16,8 +16,13 @@
                 <h:outputStylesheet name="css/stylesheet.css"/>
                 <div class="bannerContainer">
                     <img src="resources/common/HotelBanner.png"/>
-                    
+                    <div class="bannerText">
+                        <ui:insert name="uname">
+                        <h:outputText value="#{login.getLogin()}"/>
+                        </ui:insert>
+                    </div>
                 </div>
+                
             </ui:insert>
         </div>
         <div id="header">
