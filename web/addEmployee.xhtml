@@ -19,7 +19,20 @@ and open the template in the editor.
             </ui:define>
             
         <ui:define name="body">
-            TODO
+            <h:form>
+                Login: <h:inputText value="#{login.login}" required ="true"
+                    requiredMessage="Your must enter login"
+                    id="loginId"/>
+                <h:message for="loginId" style="color:red;margin:8px;"/>
+                
+                Password: <h:inputText value="#{login.password}" required ="true"
+                    requiredMessage="Your must enter password"
+                    id="passId"/>
+                <h:message for="passId" style="color:red;margin:8px;"/>
+                <h:panelGrid>
+                    <h:commandButton value="Create" action="#{login.createEmployee}"/>
+                </h:panelGrid>
+            </h:form>
         </ui:define>
         </ui:composition>
     </h:body>

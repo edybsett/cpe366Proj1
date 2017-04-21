@@ -42,11 +42,6 @@
                                       requiredMessage="Your must enter password"
                                       id="passId"/>
                 <h:message for="passId" style="color:red;margin:8px;"/>
-                
-                Title: <h:inputText value="#{login.title}" required ="true"
-                                      requiredMessage="Your must enter title"
-                                      id="titleId"/>
-                <h:message for="titleId" style="color:red;margin:8px;"/>
             </h:panelGrid>
             <h:panelGrid>
                 <h:commandButton value="Login" action="#{login.createLogin}"/>

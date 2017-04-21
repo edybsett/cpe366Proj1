@@ -144,6 +144,16 @@
     
     <navigation-rule>
         <from-view-id>
+            /addEmployee.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome>admin</from-outcome>
+            <to-view-id>/showEmployee.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>
             /deleteCustomer.xhtml
         </from-view-id>
         <navigation-case>
