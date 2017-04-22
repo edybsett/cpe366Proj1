@@ -44,4 +44,71 @@ public class Reservation implements Serializable {
                             //to set this variable!
     private boolean checkedIn;
     
+    private UIInput residUI;
+
+    public int getResid() {
+        return resid;
+    }
+
+    public void setResid(int resid) {
+        this.resid = resid;
+    }
+
+    public int getRoomid() {
+        return roomid;
+    }
+
+    public void setRoomid(int roomid) {
+        this.roomid = roomid;
+    }
+
+    public int getCustid() {
+        return custid;
+    }
+
+    public void setCustid(int custid) {
+        this.custid = custid;
+    }
+
+    public Date getStartdate() {
+        return startdate;
+    }
+
+    public void setStartdate(Date startdate) {
+        this.startdate = startdate;
+    }
+
+    public Date getEnddate() {
+        return enddate;
+    }
+
+    public void setEnddate(Date enddate) {
+        this.enddate = enddate;
+    }
+
+    public float getBasecost() {
+        return basecost;
+    }
+
+    public void setBasecost(float basecost) {
+        this.basecost = basecost;
+    }
+
+    public boolean isCheckedIn() {
+        return checkedIn;
+    }
+
+    public void setCheckedIn(boolean checkedIn) {
+        this.checkedIn = checkedIn;
+    }
+
+    public UIInput getResidUI() {
+        return residUI;
+    }
+
+    public void setResidUI(UIInput residUI) {
+        this.residUI = residUI;
+    }
+    
+    
 }
