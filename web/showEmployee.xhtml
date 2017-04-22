@@ -7,10 +7,23 @@
     
     <h:body>
         <ui:composition template="./template.xhtml">
-           <ui:define name="header">Show Employee List</ui:define>
+           <ui:define name="header">Here is a list of all Employees</ui:define>
             
         <ui:define name="body">
-            <h:form>
+            <h:dataTable value="#{employee.getEmps()}" var="emps" border="1">
+                    <h:column>
+                        <f:facet name="header">Employee ID</f:facet>
+                            #{emps.id}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Username</f:facet>
+                            #{emps.name}
+                    </h:column>           
+
+                </h:dataTable>
+            
+            <h:form>                
             <h:panelGrid>
                 <h:commandButton value="Add Employee" action="#{admindirectory.addEmployee}"/>
                 <h:commandButton value="Show Info" action="#{admindirectory.showInfo}"/>
