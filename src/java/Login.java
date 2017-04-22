@@ -189,7 +189,7 @@ public class Login implements Serializable {
         PreparedStatement preparedStatement = con.prepareStatement("Insert into Login(username, password, title) values(?,?,?)");
         preparedStatement.setString(1, login);
         preparedStatement.setString(2, password);
-        preparedStatement.setString(3, "title");
+        preparedStatement.setString(3, "customer");
         preparedStatement.executeUpdate();
         statement.close();
         con.commit();
@@ -214,6 +214,27 @@ public class Login implements Serializable {
         return createCustomer();
     }
 
+    public String createEmployee() throws SQLException, ParseException {
+       Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+
+        Statement statement = con.createStatement();
+
+        PreparedStatement preparedStatement = con.prepareStatement("Insert into Login(username, password, title) values(?,?,?)");
+        preparedStatement.setString(1, login);
+        preparedStatement.setString(2, password);
+        preparedStatement.setString(3, "employee");
+        preparedStatement.executeUpdate();
+        statement.close();
+        con.commit();
+        con.close();
+        Util.invalidateUserSession();
+        return "admin";
+    }
     
     public void validate(FacesContext context, UIComponent component, Object value)
             throws ValidatorException, SQLException {
