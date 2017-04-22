@@ -13,7 +13,7 @@ and open the template in the editor.
         <h1>Special Rates</h1>
         <link href="css/stylesheet.css" rel="stylesheet" type="text/css" />
     </h:head>
-    
+
     <h:body>
         <h2>Hotel Wide Rate Increases</h2>
         <h:dataTable value="#{specialRates.getHotelWide()}" var="hwr" border="1">
@@ -21,7 +21,7 @@ and open the template in the editor.
                 <f:facet name="header"> Start Date </f:facet>
                     #{hwr.startDate}
             </h:column>
-            
+
             <h:column>
                 <f:facet name="header"> End Date </f:facet>
                     #{hwr.endDate}
@@ -31,13 +31,13 @@ and open the template in the editor.
                 <f:facet name="header"> Price Change </f:facet>
                     #{hwr.priceChange}
             </h:column>             
-            
+
         </h:dataTable>
-        
+
         <br></br>
         <h2> Specific Room Rate Increases </h2>
         <h:dataTable value="#{specialRates.getSpecific()}" var="hs" border="1">
-            
+
             <h:column>
                 <f:facet name="header"> Room Number</f:facet>
                     #{hs.rmNum}
@@ -46,7 +46,7 @@ and open the template in the editor.
                 <f:facet name="header"> Start Date </f:facet>
                     #{hs.startDate}
             </h:column>
-            
+
             <h:column>
                 <f:facet name="header"> End Date </f:facet>
                     #{hs.endDate}
@@ -56,9 +56,9 @@ and open the template in the editor.
                 <f:facet name="header"> Price Change </f:facet>
                     #{hs.priceChange}
             </h:column>             
-            
+
         </h:dataTable>
-        
+
         <br></br>
         <h2>All Rooms</h2>
         <h:dataTable value="#{rooms.getRooms()}" var="r" border="1">
@@ -66,7 +66,7 @@ and open the template in the editor.
                 <f:facet name="header"> Room Number </f:facet>
                     #{r.rmNum}
             </h:column>
-            
+
             <h:column>
                 <f:facet name="header"> View </f:facet>
                     #{r.view}
@@ -83,45 +83,56 @@ and open the template in the editor.
             </h:column> 
 
         </h:dataTable>
-        
+
         <br></br>
-            <h:form>
+        <h:form>
             <h:panelGrid columns="3">
 
                 Room Number: <h:inputText value="#{specialRates.rmNum}" required ="true"
-                                    requiredMessage="Your must enter room number"
-                                    binding="#{specialRates.rmNumUI}"
-                                    id="rmNum"/>
+                                          requiredMessage="Your must enter room number"
+                                          binding="#{specialRates.rmNumUI}"
+                                          id="rmNum"/>
+                
+
                 <h:message for="rmNum" style="color:red;margin:8px;"/>
 
                 Start Date: <h:inputText value="#{specialRates.startDate}" required ="true"
-                                    requiredMessage="Your must enter start date"
-                                    binding="#{specialRates.startDateUI}"
-                                    id="startDate"/>
+                                         requiredMessage="Your must enter start date"
+                                         binding="#{specialRates.startDateUI}"
+                                         converterMessage="illeagal blah"
+
+                                         id="startDate">
+                <f:convertDateTime pattern="yyyy/MM/dd"/>
+                </h:inputText>
                 <h:message for="startDate" style="color:red;margin:8px;"/>
-                
+
                 End Date: <h:inputText value="#{specialRates.endDate}" required ="true"
-                                    requiredMessage="Your must enter end date"
-                                    binding="#{specialRates.endDateUI}"
-                                    id="endDate"/>
+                                       requiredMessage="Your must enter end date"
+                                       converterMessage="illeagal blah"
+                                       binding="#{specialRates.endDateUI}"
+                                       id="endDate">
+                <f:convertDateTime pattern="yyyy/MM/dd"/>
+                </h:inputText>
+
                 <h:message for="endDate" style="color:red;margin:8px;"/>
-                
+
                 Price Change: <h:inputText value="#{specialRates.priceChange}" required ="true"
-                                    requiredMessage="Your must enter price change"
-                                     binding="#{specialRates.priceChangeUI}"
-                                    id="priceChange"/>
+                                           requiredMessage="Your must enter price change"
+                                           binding="#{specialRates.priceChangeUI}"
+                                           id="priceChange"/>
+
                 <h:message for="priceChange" style="color:red;margin:8px;"/>
-                
+
 
             </h:panelGrid>
             <h:panelGrid>
                 <h:commandButton value="Go" action="#{specialRates.addSpecialRate}"/>
             </h:panelGrid>
         </h:form>
-        
-    </h:body>
-    
-    
 
-    
+    </h:body>
+
+
+
+
 </html>

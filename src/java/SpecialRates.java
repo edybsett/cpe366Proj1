@@ -65,6 +65,7 @@ public class SpecialRates implements Serializable {
     public UIInput getendDateUI() {
         return endDateUI;
     }
+    
 
     public void setendDateUI(UIInput x) {
         this.endDateUI = x;
@@ -196,15 +197,15 @@ public class SpecialRates implements Serializable {
         return "refresh";
     }
     
-    public String addSpecialRate(FacesContext context, UIComponent component, Object value) throws ValidatorException, SQLException, ParseException {
-    
+    public String addSpecialRate() throws ValidatorException, SQLException, ParseException {
+        System.out.println("special rate function callllllllllllllllllllllllllllllllllllllllllllllllllllled");
         DateFormat formatter;
-        formatter = new SimpleDateFormat("yyyy-mm-dd");
+        formatter = new SimpleDateFormat("yyyy/mm/dd");
         
-        rmNum = Integer.parseInt(rmNumUI.getLocalValue().toString());
-        startDate = formatter.parse(startDateUI.getLocalValue().toString());
-        endDate = formatter.parse(endDateUI.getLocalValue().toString());
-        priceChange = Float.parseFloat(priceChangeUI.getLocalValue().toString());  
+        //rmNum = Integer.parseInt(rmNumUI.toString());
+        //startDate = formatter.parse(startDateUI.getLocalValue().toString());
+        //endDate = formatter.parse(endDateUI.getLocalValue().toString());
+        //priceChange = Float.parseFloat(priceChangeUI.getLocalValue().toString());  
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
@@ -215,7 +216,7 @@ public class SpecialRates implements Serializable {
         
         Statement statement = con.createStatement();
 
-        PreparedStatement preparedStatement = con.prepareStatement("insert into SpecialRates(rmNum, startDate, endDate, hotelWide, priceChange) value (?,?,?,?,?)");
+        PreparedStatement preparedStatement = con.prepareStatement("insert into SpecialRates(rmNum, startDate, endDate, hotelWide, priceChange) values (?,?,?,?,?)");
         if (hotelWide == false) {
             preparedStatement.setInt(1, rmNum);
             preparedStatement.setDate(2, new java.sql.Date(startDate.getTime()));
