@@ -5,17 +5,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.ManagedBean;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Named;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 import javax.el.ELContext;
 import javax.faces.bean.ManagedProperty;
@@ -35,6 +39,46 @@ public class SpecialRates implements Serializable {
     private float priceChange;
     private boolean hotelWide;
 
+   private UIInput rmNumUI;
+   private UIInput startDateUI;
+   private UIInput endDateUI;
+   private UIInput priceChangeUI;
+   
+   
+   
+    public UIInput getrmNumUI() {
+        return rmNumUI;
+    }
+
+    public void setrmNumUI(UIInput x) {
+        this.rmNumUI = x;
+    }
+    
+     public UIInput getstartDateUI() {
+        return startDateUI;
+    }
+
+    public void setstartDateUI(UIInput x) {
+        this.startDateUI = x;
+    }  
+    
+    public UIInput getendDateUI() {
+        return endDateUI;
+    }
+
+    public void setendDateUI(UIInput x) {
+        this.endDateUI = x;
+    }
+   
+    public UIInput getpriceChangeUI() {
+        return priceChangeUI;
+    }
+
+    public void setpriceChangeUI(UIInput x) {
+        this.priceChangeUI = x;
+    }
+    
+   
     public Integer getRmNum() {
         return rmNum;
     }
@@ -152,7 +196,15 @@ public class SpecialRates implements Serializable {
         return "refresh";
     }
     
-    public String addSpecialRate() throws SQLException, ParseException {
+    public String addSpecialRate(FacesContext context, UIComponent component, Object value) throws ValidatorException, SQLException, ParseException {
+    
+        DateFormat formatter;
+        formatter = new SimpleDateFormat("yyyy-mm-dd");
+        
+        rmNum = Integer.parseInt(rmNumUI.getLocalValue().toString());
+        startDate = formatter.parse(startDateUI.getLocalValue().toString());
+        endDate = formatter.parse(endDateUI.getLocalValue().toString());
+        priceChange = Float.parseFloat(priceChangeUI.getLocalValue().toString());  
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
@@ -160,6 +212,7 @@ public class SpecialRates implements Serializable {
         }
         con.setAutoCommit(false);
 
+        
         Statement statement = con.createStatement();
 
         PreparedStatement preparedStatement = con.prepareStatement("insert into SpecialRates(rmNum, startDate, endDate, hotelWide, priceChange) value (?,?,?,?,?)");

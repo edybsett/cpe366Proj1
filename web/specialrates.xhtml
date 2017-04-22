@@ -90,27 +90,27 @@ and open the template in the editor.
 
                 Room Number: <h:inputText value="#{specialRates.rmNum}" required ="true"
                                     requiredMessage="Your must enter room number"
-                                    binding="#{specialRates.UIrmNum}"
+                                    binding="#{specialRates.rmNumUI}"
                                     id="rmNum"/>
-                <h:message for="login" style="color:red;margin:8px;"/>
+                <h:message for="rmNum" style="color:red;margin:8px;"/>
 
                 Start Date: <h:inputText value="#{specialRates.startDate}" required ="true"
                                     requiredMessage="Your must enter start date"
-                                    binding="#{specialRates.UIstartDate}"
+                                    binding="#{specialRates.startDateUI}"
                                     id="startDate"/>
-                <h:message for="login" style="color:red;margin:8px;"/>
+                <h:message for="startDate" style="color:red;margin:8px;"/>
                 
                 End Date: <h:inputText value="#{specialRates.endDate}" required ="true"
                                     requiredMessage="Your must enter end date"
-                                    binding="#{specialRates.UIendDate}"
+                                    binding="#{specialRates.endDateUI}"
                                     id="endDate"/>
-                <h:message for="login" style="color:red;margin:8px;"/>
+                <h:message for="endDate" style="color:red;margin:8px;"/>
                 
                 Price Change: <h:inputText value="#{specialRates.priceChange}" required ="true"
                                     requiredMessage="Your must enter price change"
-                                     binding="#{specialRates.UIpriceChange}"
-                                    id="login"/>
-                <h:message for="login" style="color:red;margin:8px;"/>
+                                     binding="#{specialRates.priceChangeUI}"
+                                    id="priceChange"/>
+                <h:message for="priceChange" style="color:red;margin:8px;"/>
                 
 
             </h:panelGrid>

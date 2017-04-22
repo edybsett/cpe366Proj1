@@ -37,7 +37,6 @@ h4 { margin: 10px 0 }
    -webkit-border-radius: 3px;
    -moz-border-radius: 3px;
    border-radius: 3px;
-   z-index: 500; 
    margin: 3em 0;
 }
 
@@ -46,8 +45,8 @@ h4 { margin: 10px 0 }
     color: #ffffff; 
     position: absolute;
     bottom: 10px;
-    left: 3em;
-    font-size: 42pt;
+    right: 1em;
+    font-size: 14pt;
 }
 
 .bannerLogo{
