@@ -110,5 +110,20 @@ public class Reservation implements Serializable {
         this.residUI = residUI;
     }
     
+    public String checkIn() throws SQLException {
+        resid = Integer.parseInt(residUI.getLocalValue().toString());
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        Statement ps = con.createStatement();
+        ps.executeUpdate("update reservation set checkedIn = true where resid = " + resid);
+        
+        ps.close();
+        con.commit();
+        con.close();
+        return "refresh";
+    }
     
 }
