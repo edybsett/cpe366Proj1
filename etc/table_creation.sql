@@ -40,11 +40,14 @@ CREATE TABLE Reservation(
 );
 
 CREATE TABLE SpecialRates (
-	rmNum       INT  REFERENCES Room(rmNum),
-	startDate   DATE NOT NULL,
-	endDate     DATE NOT NULL,
-	hotelWide   BOOLEAN DEFAULT False,
-	priceChange DECIMAL(6, 2) NOT NULL
+	rmNum     INT  REFERENCES Room(rmNum),
+	date DATE NOT NULL,
+	price     DECIMAL(6, 2) NOT NULL CHECK(price > 0)
+);
+
+CREATE TABLE HotelWideRates (
+   date DATE NOT NUlL,
+   price DECIMAL(6, 2) NOT NULL CHECK(price > 0)
 );
 
 -- Test data
@@ -124,10 +127,4 @@ VALUES (2, 'alice', 'smith', 'asmith@gmail.com', '123 South Street');
 -- Banking for alice
 INSERT INTO Banking(cid, ccNum, cvc, expDate, type)
 VALUES (2, '1234-5678-1234', 234, '04-11-2017', 'visa');
--- Reservation for alice
-INSERT INTO Reservation(roomId, custId, startDate, endDate, baseCost, fees)
-VALUES (102, 2, '04-17-2017', '04-20-2017', 100.00, 0.00);
--- Special rate for Christmas
-INSERT INTO SpecialRates(rmNum, startDate, endDate, hotelWide, priceChange)
-VALUES(101, '12-01-2017', '12-31-2017', true, 50.00);
 
