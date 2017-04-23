@@ -153,6 +153,22 @@ public class Reservation implements Serializable {
         return "refresh";
     }
     
+     public String removeReservation() throws SQLException {
+        resid = Integer.parseInt(residUI.getLocalValue().toString());
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        Statement ps = con.createStatement();
+        ps.executeUpdate("delete from reservation where resid = " + resid);
+        
+        ps.close();
+        con.commit();
+        con.close();
+        return "refresh";
+    }
+    
     public List<Reservation> getReservations() throws SQLException {
         Connection con = dbConnect.getConnection();
 
