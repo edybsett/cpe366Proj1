@@ -18,7 +18,41 @@ and open the template in the editor.
             <ui:define name="header">Show Employee Info</ui:define>
             
         <ui:define name="body">
-            <h5>TODO</h5>
+            <h:form>
+            <h:dataTable value="#{employee.getEmps()}" var="emps" border="1">
+                    <h:column>
+                        <f:facet name="header">Employee ID</f:facet>
+                            #{emps.id}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Username</f:facet>
+                            #{emps.name}
+                    </h:column>   
+                    <h:column>
+                        <f:facet name="header">Password</f:facet>
+                        #{emps.password}
+                    </h:column>
+            </h:dataTable>
+            
+            <h:panelGrid columns="3">
+
+                employee id: <h:inputText value="#{employee.id}" required ="true"
+                                    requiredMessage="Your must enter employee id"
+                                    id="id"/>
+                <h:message for="login" style="color:red;margin:8px;"/>
+
+                new password: <h:inputSecret value="#{employee.password}" required ="true"
+                                         requiredMessage="Your must enter password"
+                                         id="password"/>
+                <h:message for="password" style="color:red;margin:8px;"/>
+
+            </h:panelGrid>
+            <h:panelGrid>
+                <h:commandButton value="Change Password" action="#{employee.changePassword}"/>
+            </h:panelGrid>
+            
+            </h:form>
         </ui:define>
         </ui:composition>
 
