@@ -38,7 +38,10 @@ public class Reservation implements Serializable {
     private int custid;
     private Date startdate;
     private Date enddate;
+    private float fees;
     private float basecost; //FYI this should be set ahead of time,
+
+    
                             //Like when the reservation is created the cost should be set
                             //Do not use the special rates table/reservation transformation table
                             //to set this variable!
@@ -62,6 +65,14 @@ public class Reservation implements Serializable {
         this.roomid = roomid;
     }
 
+    public float getFees() {
+        return fees;
+    }
+
+    public void setFees(float fees) {
+        this.fees = fees;
+    }
+    
     public int getCustid() {
         return custid;
     }
@@ -124,6 +135,55 @@ public class Reservation implements Serializable {
         con.commit();
         con.close();
         return "refresh";
+    }
+    
+    public String checkOut() throws SQLException {
+        resid = Integer.parseInt(residUI.getLocalValue().toString());
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        Statement ps = con.createStatement();
+        ps.executeUpdate("update reservation set checkedIn = false where resid = " + resid);
+        
+        ps.close();
+        con.commit();
+        con.close();
+        return "refresh";
+    }
+    
+    public List<Reservation> getReservations() throws SQLException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+
+        PreparedStatement ps
+                = con.prepareStatement(
+                        "select * from reservation");
+
+        //get customer data from database
+        ResultSet result = ps.executeQuery();
+
+        List<Reservation> list = new ArrayList<Reservation>();
+
+        while (result.next()) {
+            Reservation rate = new Reservation();
+            rate.setResid(result.getInt("resid"));
+            rate.setCheckedIn(result.getBoolean("checkedIn"));
+            rate.setCustid(result.getInt("custid"));
+            rate.setStartdate(result.getDate("startdate"));
+            rate.setEnddate(result.getDate("enddate"));
+            rate.setRoomid(result.getInt("roomId"));
+            rate.setBasecost(result.getFloat("basecost"));
+            rate.setFees(result.getFloat("fees"));
+            list.add(rate);
+        }
+        result.close();
+        con.close();
+        return list;
     }
     
 }
