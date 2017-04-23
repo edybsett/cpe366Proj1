@@ -91,6 +91,10 @@
             <from-outcome>showSpecialRates</from-outcome>
             <to-view-id>/specialrates.xhtml </to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>register</from-outcome>
+            <to-view-id>/newCustomer.xhtml </to-view-id>
+        </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
