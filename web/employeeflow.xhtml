@@ -11,7 +11,39 @@
             <ui:define name="header">Employee</ui:define>
             
         <ui:define name="body">
-            <h5>BLAH</h5>
+            <h2>Reservations</h2>
+            <h:dataTable value="#{reservation.getReservations()}" var="res" border="1">
+                <h:column>
+                    <f:facet name="header"> Reservation ID </f:facet>
+                        #{res.resid}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header"> Checked In </f:facet>
+                        #{res.checkedIn}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header"> Customer ID </f:facet>
+                        #{res.custid}
+                </h:column>
+                <h:column>
+                    <f:facet name="header"> Room </f:facet>
+                        #{res.roomid}
+                </h:column>
+                <h:column>
+                    <f:facet name="header"> Start Date </f:facet>
+                        #{res.startdate}
+                </h:column> 
+                <h:column>
+                    <f:facet name="header"> End Date </f:facet>
+                        #{res.enddate}
+                </h:column>
+                <h:column>
+                    <f:facet name="header"> Current Charge </f:facet>
+                        #{res.totalCost}
+                </h:column>
+            </h:dataTable>
         </ui:define>
         </ui:composition>
     </h:body>
