@@ -1,4 +1,3 @@
-﻿
 CREATE TABLE Login(
 	id       SERIAL PRIMARY KEY,
 	username TEXT   NOT NULL,
@@ -36,7 +35,8 @@ CREATE TABLE Reservation(
 	startDate DATE   NOT NULL,
 	endDate   DATE   NOT NULL CHECK(endDate > startDate),
 	baseCost  DECIMAL(6, 2) NOT NULL,
-	fees      DECIMAL(6, 2) NOT NULL
+	fees      DECIMAL(6, 2) NOT NULL,
+        checkedIn BOOLEAN NOT NULL DEFAULT False
 );
 
 CREATE TABLE SpecialRates (
