@@ -39,6 +39,9 @@ public class Reservation implements Serializable {
     private Date startdate;
     private Date enddate;
     private float fees;
+    private float totalCost;
+    private String custFirst;
+    private String custLast;
     private float basecost; //FYI this should be set ahead of time,
 
     
@@ -120,6 +123,30 @@ public class Reservation implements Serializable {
     public void setResidUI(UIInput residUI) {
         this.residUI = residUI;
     }
+
+    public float getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(float totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    public String getCustFirst() {
+        return custFirst;
+    }
+
+    public void setCustFirst(String custFirst) {
+        this.custFirst = custFirst;
+    }
+
+    public String getCustLast() {
+        return custLast;
+    }
+
+    public void setCustLast(String custLast) {
+        this.custLast = custLast;
+    }
     
     public String checkIn() throws SQLException {
         resid = Integer.parseInt(residUI.getLocalValue().toString());
@@ -195,6 +222,7 @@ public class Reservation implements Serializable {
             rate.setRoomid(result.getInt("roomId"));
             rate.setBasecost(result.getFloat("basecost"));
             rate.setFees(result.getFloat("fees"));
+            totalCost = fees + basecost;
             list.add(rate);
         }
         result.close();
