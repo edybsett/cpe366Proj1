@@ -95,6 +95,10 @@
             <from-outcome>register</from-outcome>
             <to-view-id>/newCustomer.xhtml </to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>addAdmin</from-outcome>
+            <to-view-id>/addAdmin.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
@@ -172,7 +176,15 @@
         </navigation-case>
     </navigation-rule>
     
-    
+    <navigation-rule>
+        <from-view-id>
+            /addAdmin.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome>admin</from-outcome>
+            <to-view-id>/adminDirectory.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
     
     
     
