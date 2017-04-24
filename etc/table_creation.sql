@@ -1,6 +1,20 @@
+/* This is the create table file with initial data values */
+/* When needing to clear everything here is the command sequence
+   to run for a local machine: */
+/*
+DROP TABLE Reservation;
+DROP TABLE Fees;
+DROP TABLE SpecialRates;
+DROP TABLE HotelWideRates;
+DROP TABLE Room;
+DROP TABLE Banking;
+DROP TABLE Customer;
+DROP TABLE Login;
+*/
+
 CREATE TABLE Login(
 	id       SERIAL PRIMARY KEY,
-	username TEXT   NOT NULL,
+	username TEXT   NOT NULL UNIQUE,
 	password TEXT   NOT NULL,
 	title    TEXT   NOT NULL -- admin, employee, or customer
 );
@@ -48,6 +62,11 @@ CREATE TABLE SpecialRates (
 CREATE TABLE HotelWideRates (
    date DATE NOT NUlL,
    price DECIMAL(6, 2) NOT NULL CHECK(price > 0)
+);
+
+CREATE TABLE Fees (
+    name TEXT NOT NULL,
+    price DECIMAL(6, 2) NOT NULL CHECK (price > 0)
 );
 
 -- Test data
@@ -128,3 +147,9 @@ VALUES (2, 'alice', 'smith', 'asmith@gmail.com', '123 South Street');
 INSERT INTO Banking(cid, ccNum, cvc, expDate, type)
 VALUES (2, '1234-5678-1234', 234, '04-11-2017', 'visa');
 
+-- Standard fee entries
+INSERT INTO Fees
+VALUES ('breakfast', 10.00), 
+    ('wifi', 20.00), 
+    ('cleaning', 25.00),
+    ('alcohol', 5.00);

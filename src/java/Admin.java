@@ -42,6 +42,10 @@ public class Admin {
         return "addEmployee";
     }
     
+    public String addAdmin() {
+        return "addAdmin";
+    }
+    
     public String showEmployeeList(){
         return "showEmployeeList";
     }

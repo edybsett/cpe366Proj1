@@ -236,6 +236,28 @@ public class Login implements Serializable {
         return "admin";
     }
     
+    public String createAdmin() throws SQLException, ParseException {
+       Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+
+        Statement statement = con.createStatement();
+
+        PreparedStatement preparedStatement = con.prepareStatement("Insert into Login(username, password, title) values(?,?,?)");
+        preparedStatement.setString(1, login);
+        preparedStatement.setString(2, password);
+        preparedStatement.setString(3, "admin");
+        preparedStatement.executeUpdate();
+        statement.close();
+        con.commit();
+        con.close();
+        //Util.invalidateUserSession();
+        return "admin";
+    }
+    
     public void validate(FacesContext context, UIComponent component, Object value)
             throws ValidatorException, SQLException {
         login = loginUI.getLocalValue().toString();

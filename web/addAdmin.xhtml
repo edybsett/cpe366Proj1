@@ -15,7 +15,7 @@ and open the template in the editor.
         <ui:composition template="./template.xhtml">
         
             <ui:define name="header">
-                Add New Employee
+                Add New Admin
             </ui:define>
             
         <ui:define name="body">
@@ -30,7 +30,7 @@ and open the template in the editor.
                     id="passId"/>
                 <h:message for="passId" style="color:red;margin:8px;"/>
                 <h:panelGrid>
-                    <h:commandButton value="Create" action="#{login.createEmployee}"/>
+                    <h:commandButton value="Create" action="#{login.createAdmin}"/>
                 </h:panelGrid>
             </h:form>
         </ui:define>
