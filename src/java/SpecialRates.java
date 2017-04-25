@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.annotation.ManagedBean;
 import javax.faces.application.FacesMessage;
@@ -34,9 +35,10 @@ import javax.faces.bean.ManagedProperty;
 public class SpecialRates implements Serializable {
     private DBConnect dbConnect = new DBConnect();
     private Integer rmNum;
+    private Date date;
     private Date startDate;
     private Date endDate;
-    private float priceChange;
+    private float price;
     private boolean hotelWide;
 
    private UIInput rmNumUI;
@@ -84,32 +86,40 @@ public class SpecialRates implements Serializable {
         return rmNum;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getDate() {
+        return date;
     }
 
     public Date getEndDate() {
         return endDate;
     }
 
-    public float getPriceChange() {
-        return priceChange;
+    public Date getStartDate(){
+        return startDate;
+    }
+    
+    public float getPrice() {
+        return price;
     }
 
     public void setRmNum(Integer rmNum) {
         this.rmNum = rmNum;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setDate(Date startDate) {
+        this.date = startDate;
     }
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+    
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-    public void setPriceChange(float priceChange) {
-        this.priceChange = priceChange;
+    public void setPrice(float priceChange) {
+        this.price = priceChange;
     }
 
     public boolean isHotelWide() {
@@ -129,7 +139,7 @@ public class SpecialRates implements Serializable {
 
         PreparedStatement ps
                 = con.prepareStatement(
-                        "select startDate, endDate, priceChange from SpecialRates where hotelWide=true");
+                        "select date, price from HotelWideRates");
                            //"Select * from SpecialRates");
         //get customer data from database
         ResultSet result = ps.executeQuery();
@@ -138,9 +148,9 @@ public class SpecialRates implements Serializable {
 
         while (result.next()) {
             SpecialRates rate = new SpecialRates();
-            rate.setStartDate(result.getDate("startDate"));
-            rate.setEndDate(result.getDate("endDate"));
-            rate.setPriceChange(result.getFloat("priceChange"));
+            rate.setDate(result.getDate("date"));
+            //rate.setEndDate(result.getDate("endDate"));
+            rate.setPrice(result.getFloat("price"));
             rate.setHotelWide(true);
             list.add(rate);
         }
@@ -158,7 +168,7 @@ public class SpecialRates implements Serializable {
 
         PreparedStatement ps
                 = con.prepareStatement(
-                        "select rmNum, startDate, endDate, priceChange from SpecialRates where hotelWide=false");
+                        "select rmNum, date, price from SpecialRates");
 
         //get customer data from database
         ResultSet result = ps.executeQuery();
@@ -168,9 +178,10 @@ public class SpecialRates implements Serializable {
         while (result.next()) {
             SpecialRates rate = new SpecialRates();
             rate.setRmNum(result.getInt("rmNum"));
-            rate.setStartDate(result.getDate("startDate"));
-            rate.setEndDate(result.getDate("endDate"));
-            rate.setPriceChange(result.getFloat("priceChange"));
+            rate.setDate(result.getDate("date"));
+            //rate.setEndDate(result.getDate("endDate"));
+            
+            rate.setPrice(result.getFloat("price"));
             rate.setHotelWide(false);
             list.add(rate);
         }
@@ -197,15 +208,10 @@ public class SpecialRates implements Serializable {
         return "refresh";
     }
     
-    public String addSpecialRate() throws ValidatorException, SQLException, ParseException {
-        System.out.println("special rate function callllllllllllllllllllllllllllllllllllllllllllllllllllled");
-        DateFormat formatter;
-        formatter = new SimpleDateFormat("yyyy/mm/dd");
-        
-        //rmNum = Integer.parseInt(rmNumUI.toString());
-        //startDate = formatter.parse(startDateUI.getLocalValue().toString());
-        //endDate = formatter.parse(endDateUI.getLocalValue().toString());
-        //priceChange = Float.parseFloat(priceChangeUI.getLocalValue().toString());  
+    
+    
+    public String addSpecialRateHW() throws ValidatorException, SQLException, ParseException {
+        System.out.println("dayssss " + daysBetween(startDate, endDate));
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
@@ -215,27 +221,53 @@ public class SpecialRates implements Serializable {
 
         
         Statement statement = con.createStatement();
-
-        PreparedStatement preparedStatement = con.prepareStatement("insert into SpecialRates(rmNum, startDate, endDate, hotelWide, priceChange) values (?,?,?,?,?)");
-        if (hotelWide == false) {
-            preparedStatement.setInt(1, rmNum);
-            preparedStatement.setDate(2, new java.sql.Date(startDate.getTime()));
-            preparedStatement.setDate(3, new java.sql.Date(endDate.getTime()));
-            preparedStatement.setBoolean(4, hotelWide);
-            preparedStatement.setFloat(5, priceChange);
+            PreparedStatement preparedStatement = con.prepareStatement("insert into HotelWideRates(date, price) values (?,?)");
+            preparedStatement.setDate(1, new java.sql.Date(startDate.getTime()));
+            preparedStatement.setFloat(2, price);
             preparedStatement.executeUpdate();
             
+
+        statement.close();
+        con.commit();
+        con.close();
+        return "refresh";
+     
+    
+    }
+    
+    public String addSpecialRate() throws ValidatorException, SQLException, ParseException {
+
+               
+        
+        
+        
+        long days2add = daysBetween(startDate, endDate);
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+
+        
+        Statement statement = con.createStatement();
+        if(rmNum != null) {
+            PreparedStatement preparedStatement = con.prepareStatement("insert into SpecialRates(rmNum, date, price) values (?,?,?)");
+            for(int v = 0; v <= days2add; v++) {
+                startDate = DateUtil.addDays(startDate, 1);
+                preparedStatement.setInt(1, rmNum);
+                preparedStatement.setDate(2, new java.sql.Date(startDate.getTime()));
+                preparedStatement.setFloat(3, price);
+                preparedStatement.executeUpdate();
+            }
         }
         else {
-            rmNum = 100;
-            for (int i = 0; i < 60; i++) {
-                int start = (int)i/12 * 100 + 101;
-                preparedStatement.setInt(1, start + (i % 12));
-                preparedStatement.setDate(2, new java.sql.Date(startDate.getTime()));
-                preparedStatement.setDate(3, new java.sql.Date(endDate.getTime()));
-                preparedStatement.setBoolean(4, hotelWide);
-                preparedStatement.setFloat(5, priceChange);
-                preparedStatement.executeUpdate();
+            PreparedStatement preparedStatement = con.prepareStatement("insert into HotelWideRates(date, price) values (?,?)");
+            for(int v = 0; v <= days2add; v++) {
+                    startDate = DateUtil.addDays(startDate, 1);
+                    preparedStatement.setDate(1, new java.sql.Date(startDate.getTime()));
+                    preparedStatement.setFloat(2, price);
+                    preparedStatement.executeUpdate();
             }
         }
         statement.close();
@@ -266,4 +298,30 @@ public class SpecialRates implements Serializable {
         return false;
     }
     
+    public static long daysBetween(Date startDate, Date endDate) {
+        Calendar calStart = Calendar.getInstance();
+        Calendar calEnd = Calendar.getInstance();
+        
+        calStart.setTime(startDate);
+        calEnd.setTime(endDate);
+        
+        Calendar date = (Calendar) calStart.clone();  
+        long daysBetween = 0;  
+        while (date.before(calEnd)) {  
+            date.add(Calendar.DAY_OF_MONTH, 1);  
+            daysBetween++;  
+        }  
+        return daysBetween;  
+    }  
+    
+    
+    public static class DateUtil  {
+        public static Date addDays(Date date, int days)
+        {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DATE, days); //minus number would decrement the days
+            return cal.getTime();
+        }
+    }
 }
