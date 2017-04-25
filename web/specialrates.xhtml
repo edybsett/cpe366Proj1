@@ -17,19 +17,16 @@ and open the template in the editor.
     <h:body>
         <h2>Hotel Wide Rate Increases</h2>
         <h:dataTable value="#{specialRates.getHotelWide()}" var="hwr" border="1">
+
+
             <h:column>
-                <f:facet name="header"> Start Date </f:facet>
-                    #{hwr.startDate}
+                <f:facet name="header"> Date </f:facet>
+                    #{hwr.date}
             </h:column>
 
             <h:column>
-                <f:facet name="header"> End Date </f:facet>
-                    #{hwr.endDate}
-            </h:column>
-
-            <h:column>
-                <f:facet name="header"> Price Change </f:facet>
-                    #{hwr.priceChange}
+                <f:facet name="header"> Price </f:facet>
+                    #{hwr.price}
             </h:column>             
 
         </h:dataTable>
@@ -42,19 +39,15 @@ and open the template in the editor.
                 <f:facet name="header"> Room Number</f:facet>
                     #{hs.rmNum}
             </h:column>
-            <h:column>
-                <f:facet name="header"> Start Date </f:facet>
-                    #{hs.startDate}
-            </h:column>
 
             <h:column>
-                <f:facet name="header"> End Date </f:facet>
-                    #{hs.endDate}
+                <f:facet name="header"> Date </f:facet>
+                    #{hs.date}
             </h:column>
 
             <h:column>
                 <f:facet name="header"> Price Change </f:facet>
-                    #{hs.priceChange}
+                    #{hs.price}
             </h:column>             
 
         </h:dataTable>
@@ -84,12 +77,12 @@ and open the template in the editor.
 
         </h:dataTable>
 
-        <br></br>
+        <br><h3>Leave Room Number blank for Hotel Wide</h3></br>
         <h:form>
+            
             <h:panelGrid columns="3">
 
-                Room Number: <h:inputText value="#{specialRates.rmNum}" required ="true"
-                                          requiredMessage="Your must enter room number"
+                Room Number: <h:inputText value="#{specialRates.rmNum}"
                                           binding="#{specialRates.rmNumUI}"
                                           id="rmNum"/>
                 
@@ -116,13 +109,12 @@ and open the template in the editor.
 
                 <h:message for="endDate" style="color:red;margin:8px;"/>
 
-                Price Change: <h:inputText value="#{specialRates.priceChange}" required ="true"
+                Price: <h:inputText value="#{specialRates.price}" required ="true"
                                            requiredMessage="Your must enter price change"
                                            binding="#{specialRates.priceChangeUI}"
-                                           id="priceChange"/>
+                                           id="price"/>
 
-                <h:message for="priceChange" style="color:red;margin:8px;"/>
-
+                <h:message for="price" style="color:red;margin:8px;"/>
 
             </h:panelGrid>
             <h:panelGrid>
