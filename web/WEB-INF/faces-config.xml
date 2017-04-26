@@ -172,6 +172,16 @@
         </navigation-case>
     </navigation-rule>
     
+        <navigation-rule>
+        <from-view-id>
+            /specialrates.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome>refresh</from-outcome>
+            <to-view-id>/specialrates.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
     <navigation-rule>
         <from-view-id>
             /addEmployee.xhtml
