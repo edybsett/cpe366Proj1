@@ -196,7 +196,7 @@ public class Reservation implements Serializable {
 
         PreparedStatement ps
                 = con.prepareStatement(
-                        "select * from reservation");
+                        "select r.resid, r.checkedIn, c.lastname, c.firstname, r.startdate, r.enddate, r.roomId, r.basecost from reservation r, customer c where r.custid = c.cid");
 
         //get customer data from database
         ResultSet result = ps.executeQuery();
@@ -207,13 +207,14 @@ public class Reservation implements Serializable {
             Reservation rate = new Reservation();
             rate.setResid(result.getInt("resid"));
             rate.setCheckedIn(result.getBoolean("checkedIn"));
-            rate.setCustid(result.getInt("custid"));
+           //rate.setCustid(result.getInt("custid"));
+            rate.setCustLast(result.getString("lastname"));
+            rate.setCustFirst(result.getString("firstname"));
             rate.setStartdate(result.getDate("startdate"));
             rate.setEnddate(result.getDate("enddate"));
             rate.setRoomid(result.getInt("roomId"));
             rate.setBasecost(result.getFloat("basecost"));
-            
-            totalCost = basecost;
+            rate.setTotalCost(result.getFloat("basecost"));
             list.add(rate);
         }
         result.close();
