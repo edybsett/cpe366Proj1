@@ -44,6 +44,52 @@
                         #{res.totalCost}
                 </h:column>
             </h:dataTable>
+            <br></br>
+            <h:form>
+                <h:panelGrid columns="3">
+
+                    Reservation Check-in: <h:inputText value="#{reservation.resid}" required ="true"
+                                              requiredMessage="Your must enter reservation number"
+                                              id="resid"/>
+
+
+                    <h:message for="resid" style="color:red;margin:8px;"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:commandButton value="Check In" action="#{reservation.checkIn}"/>
+                </h:panelGrid>
+            </h:form>
+            <br></br>
+            <h:form>
+                <h:panelGrid columns="3">
+
+                    Reservation Check-out: <h:inputText value="#{reservation.resid}" required ="true"
+                                              requiredMessage="Your must enter reservation number"
+                                              id="resid"/>
+
+
+                    <h:message for="resid" style="color:red;margin:8px;"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:commandButton value="Check Out" action="#{reservation.checkOut}"/>
+                </h:panelGrid>
+            </h:form>
+            <br></br>
+            <h:form>
+                <h:panelGrid columns="3">
+
+                    Delete Reservation: <h:inputText value="#{reservation.resid}" required ="true"
+                                              requiredMessage="Your must enter reservation number"
+                                              id="resid"/>
+
+
+                    <h:message for="resid" style="color:red;margin:8px;"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:commandButton value="Remove" action="#{reservation.removeReservation}"/>
+                </h:panelGrid>
+            </h:form>
+            
         </ui:define>
         </ui:composition>
     </h:body>

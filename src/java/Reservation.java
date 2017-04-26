@@ -38,7 +38,6 @@ public class Reservation implements Serializable {
     private int custid;
     private Date startdate;
     private Date enddate;
-    private float fees;
     private float totalCost;
     private String custFirst;
     private String custLast;
@@ -50,7 +49,7 @@ public class Reservation implements Serializable {
                             //to set this variable!
     private boolean checkedIn;
     
-    private UIInput residUI;
+    private UIInput residUI = new UIInput();
 
     public int getResid() {
         return resid;
@@ -66,14 +65,6 @@ public class Reservation implements Serializable {
 
     public void setRoomid(int roomid) {
         this.roomid = roomid;
-    }
-
-    public float getFees() {
-        return fees;
-    }
-
-    public void setFees(float fees) {
-        this.fees = fees;
     }
     
     public int getCustid() {
@@ -149,7 +140,7 @@ public class Reservation implements Serializable {
     }
     
     public String checkIn() throws SQLException {
-        resid = Integer.parseInt(residUI.getLocalValue().toString());
+
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
@@ -159,13 +150,13 @@ public class Reservation implements Serializable {
         ps.executeUpdate("update reservation set checkedIn = true where resid = " + resid);
         
         ps.close();
-        con.commit();
+        //con.commit();
         con.close();
         return "refresh";
     }
     
     public String checkOut() throws SQLException {
-        resid = Integer.parseInt(residUI.getLocalValue().toString());
+        
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
@@ -175,7 +166,7 @@ public class Reservation implements Serializable {
         ps.executeUpdate("update reservation set checkedIn = false where resid = " + resid);
         
         ps.close();
-        con.commit();
+        //con.commit();
         con.close();
         return "refresh";
     }
@@ -191,7 +182,7 @@ public class Reservation implements Serializable {
         ps.executeUpdate("delete from reservation where resid = " + resid);
         
         ps.close();
-        con.commit();
+        //con.commit();
         con.close();
         return "refresh";
     }
@@ -221,8 +212,8 @@ public class Reservation implements Serializable {
             rate.setEnddate(result.getDate("enddate"));
             rate.setRoomid(result.getInt("roomId"));
             rate.setBasecost(result.getFloat("basecost"));
-            rate.setFees(result.getFloat("fees"));
-            totalCost = fees + basecost;
+            
+            totalCost = basecost;
             list.add(rate);
         }
         result.close();

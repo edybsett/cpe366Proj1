@@ -86,6 +86,17 @@
     
     <navigation-rule>
         <from-view-id>
+            /employeeflow.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome>refresh</from-outcome>
+            <to-view-id>/employeeflow.xhtml</to-view-id>
+        </navigation-case>
+            
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>
             /adminDirectory.xhtml
         </from-view-id>
         <navigation-case>
