@@ -196,7 +196,17 @@ public class Reservation implements Serializable {
 
         PreparedStatement ps
                 = con.prepareStatement(
-                        "select r.resid, r.checkedIn, c.lastname, c.firstname, r.startdate, r.enddate, r.roomId, r.basecost from reservation r, customer c where r.custid = c.cid");
+                        "select r.resid, r.checkedIn, c.lastname, c.firstname, \n" +
+                        "  r.startdate, r.enddate, r.roomId, r.basecost, \n" +
+                        "  CASE WHEN f.sum = NULL \n" +
+                        "    THEN 0 \n" +
+                        "  ELSE f.sum \n" +
+                        "  END as fees \n" +
+                        "from reservation r, customer c, \n" +
+                        "    (SELECT sum(price), Reservation.resId FROM Reservation, Fees, ResXFee\n" +
+                        "      where Reservation.resId = ResXFee.resId AND\n" +
+                        "      feeId = Fees.id group by Reservation.resId) f\n" +
+                        "where r.custid = c.cid and r.resid = f.resid;");
 
         //get customer data from database
         ResultSet result = ps.executeQuery();
@@ -213,8 +223,8 @@ public class Reservation implements Serializable {
             rate.setStartdate(result.getDate("startdate"));
             rate.setEnddate(result.getDate("enddate"));
             rate.setRoomid(result.getInt("roomId"));
-            rate.setBasecost(result.getFloat("basecost"));
-            rate.setTotalCost(result.getFloat("basecost"));
+            
+            rate.setTotalCost(result.getFloat("basecost") + result.getFloat("fees"));
             list.add(rate);
         }
         result.close();
