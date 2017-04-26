@@ -92,7 +92,7 @@ and open the template in the editor.
                 Start Date: <h:inputText value="#{specialRates.startDate}" required ="true"
                                          requiredMessage="Your must enter start date"
                                          binding="#{specialRates.startDateUI}"
-                                         converterMessage="illeagal blah"
+                                         converterMessage="YYYY/MM/DD"
 
                                          id="startDate">
                 <f:convertDateTime pattern="yyyy/MM/dd"/>
@@ -101,7 +101,7 @@ and open the template in the editor.
 
                 End Date: <h:inputText value="#{specialRates.endDate}" required ="true"
                                        requiredMessage="Your must enter end date"
-                                       converterMessage="illeagal blah"
+                                       converterMessage="YYYY/MM/DD"
                                        binding="#{specialRates.endDateUI}"
                                        id="endDate">
                 <f:convertDateTime pattern="yyyy/MM/dd"/>
