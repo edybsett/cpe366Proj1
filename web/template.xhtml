@@ -19,12 +19,11 @@
                     <div class="bannerUname">
                         <ui:insert name="uname">
                             <h:form>
-                                <h:outputText value="#{login.getLogin()}"></h:outputText>
+                                <h:outputText value="#{login.getLogin()}"/>
+                                <h:commandButton value="(Logout)" 
+                                                 action="#{login.logout}"
+                                                 styleClass="bannerLogout"/>
                             </h:form>
-                                <h:form>
-                                    <h:link value = "(Logout)" outcome = "#{login.logout()}"
-                                            styleClass="bannerLogout"/>
-                                </h:form>
                         </ui:insert>
                     </div>
                 </div>

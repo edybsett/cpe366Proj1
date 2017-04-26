@@ -20,17 +20,17 @@ and open the template in the editor.
             
         <ui:define name="body">
             <h:form>
-                Login: <h:inputText value="#{login.login}" required ="true"
+                Login: <h:inputText value="#{form.username}" required ="true"
                     requiredMessage="Your must enter login"
                     id="loginId"/>
                 <h:message for="loginId" style="color:red;margin:8px;"/>
                 
-                Password: <h:inputSecret value="#{login.password}" required ="true"
+                Password: <h:inputSecret value="#{form.password}" required ="true"
                     requiredMessage="Your must enter password"
                     id="passId"/>
                 <h:message for="passId" style="color:red;margin:8px;"/>
                 <h:panelGrid>
-                    <h:commandButton value="Create" action="#{login.createEmployee}"/>
+                    <h:commandButton value="Create" action="#{form.createEmployee}"/>
                 </h:panelGrid>
             </h:form>
         </ui:define>

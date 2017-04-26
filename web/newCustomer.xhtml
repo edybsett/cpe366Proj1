@@ -13,38 +13,40 @@
         <ui:define name="body">
         <h:form>
             <h:panelGrid columns="3">
-                First Name: <h:inputText value="#{login.firstName}" required ="true"
+                First Name: <h:inputText value="#{form.firstName}" required ="true"
                                    requiredMessage="Your must enter Customer Name"
                                    id="userFirstName"/>
                 <h:message for="userFirstName" style="color:red;margin:8px;"/>
                 
-                Last Name: <h:inputText value="#{login.lastName}" required ="true"
+                Last Name: <h:inputText value="#{form.lastName}" required ="true"
                                    requiredMessage="Your must enter Last Name"
                                    id="userLastName"/>
                 <h:message for="userLastName" style="color:red;margin:8px;"/>
 
-                Address: <h:inputText value="#{login.address}" required ="true"
+                Address: <h:inputText value="#{form.address}" required ="true"
                                       requiredMessage="Your must enter Customer Address"
                                       id="userAddress"/>
                 <h:message for="userAddress" style="color:red;margin:8px;"/>
 
-                Email: <h:inputText value="#{login.email}" required ="true"
+                Email: <h:inputText value="#{form.email}" required ="true"
                                    requiredMessage="Email Required"
                                    id="userEmail"/>
                 <h:message for="userEmail" style="color:red;margin:8px;"/>
                                 
-                Login: <h:inputText value="#{login.login}" required ="true"
+                Login: <h:inputText value="#{form.username}" required ="true"
                                       requiredMessage="Your must enter login"
+                                      validator="#{form.checkUsernameTaken}"
+                                      validatorMessage="Username taken"
                                       id="loginId"/>
                 <h:message for="loginId" style="color:red;margin:8px;"/>
                 
-                Password: <h:inputSecret value="#{login.password}" required ="true"
+                Password: <h:inputSecret value="#{form.password}" required ="true"
                                       requiredMessage="Your must enter password"
                                       id="passId"/>
                 <h:message for="passId" style="color:red;margin:8px;"/>
             </h:panelGrid>
             <h:panelGrid>
-                <h:commandButton value="Login" action="#{login.createLogin}"/>
+                <h:commandButton value="Login" action="#{form.createLogin}"/>
             </h:panelGrid>
         </h:form>
         </ui:define>

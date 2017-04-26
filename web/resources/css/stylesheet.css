@@ -52,10 +52,17 @@ h4 { margin: 10px 0 }
 .bannerLogout{
     font-family: Tahoma, Geneva, sans-serif;
     color: #ffffff;
+    background-color: #062f4f;
     position: absolute;
     bottom: 30px;
-    right: 0.5em;
+    right: 0em;
+    border: none;
     font-size: 8pt;
+}
+
+.bannerLogout:hover{
+    color: #000000;
+    background-color: #036fab;
 }
 
 .bannerLogo{

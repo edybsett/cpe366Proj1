@@ -52,6 +52,11 @@
         <managed-bean-class>Reservation</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>form</managed-bean-name>
+        <managed-bean-class>Form</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
     
     
     
@@ -104,6 +109,11 @@
             <to-view-id>/showEmployee.xhtml</to-view-id>
         </navigation-case>
         <navigation-case>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/index.xhtml </to-view-id>
+        </navigation-case>
+
+        <navigation-case>
             <from-outcome>showSpecialRates</from-outcome>
             <to-view-id>/specialrates.xhtml </to-view-id>
         </navigation-case>
@@ -128,6 +138,10 @@
         <navigation-case>
             <from-outcome>showEmployeeInfo</from-outcome>
             <to-view-id>/employeeInfo.xhtml </to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/index.xhtml </to-view-id>
         </navigation-case>
     </navigation-rule> 
     <navigation-rule>
@@ -170,6 +184,11 @@
             <from-outcome>showCustomer</from-outcome>
             <to-view-id>/displayCustomer.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/index.xhtml </to-view-id>
+        </navigation-case>
+
     </navigation-rule>
     
     <navigation-rule>
@@ -179,6 +198,10 @@
         <navigation-case>
             <from-outcome>admin</from-outcome>
             <to-view-id>/showEmployee.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/index.xhtml </to-view-id>
         </navigation-case>
     </navigation-rule>
     
@@ -190,6 +213,11 @@
             <from-outcome>main</from-outcome>
             <to-view-id>/start.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/index.xhtml </to-view-id>
+        </navigation-case>
+
     </navigation-rule>
     
     <navigation-rule>
@@ -200,8 +228,22 @@
             <from-outcome>admin</from-outcome>
             <to-view-id>/adminDirectory.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/index.xhtml </to-view-id>
+        </navigation-case>
+
     </navigation-rule>
     
-    
+    <navigation-rule>
+        <from-view-id>
+            /employeeInfo.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/index.xhtml </to-view-id>
+        </navigation-case>
+
+    </navigation-rule>
     
 </faces-config>
