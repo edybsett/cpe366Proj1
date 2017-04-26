@@ -2,6 +2,7 @@
 /* When needing to clear everything here is the command sequence
    to run for a local machine: */
 /*
+DROP TABLE ResXFees;
 DROP TABLE Reservation;
 DROP TABLE Fees;
 DROP TABLE SpecialRates;
@@ -49,7 +50,6 @@ CREATE TABLE Reservation(
 	startDate DATE   NOT NULL,
 	endDate   DATE   NOT NULL CHECK(endDate > startDate),
 	baseCost  DECIMAL(6, 2) NOT NULL,
-	fees      DECIMAL(6, 2) NOT NULL,
         checkedIn BOOLEAN NOT NULL DEFAULT False
 );
 
@@ -65,8 +65,15 @@ CREATE TABLE HotelWideRates (
 );
 
 CREATE TABLE Fees (
+    id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
     price DECIMAL(6, 2) NOT NULL CHECK (price > 0)
+);
+
+CREATE TABLE ResXFee (
+    id SERIAL PRIMARY KEY,
+    resId INT REFERENCES Reservation(resId),
+    feeId INT REFERENCES Fees(id)
 );
 
 -- Test data

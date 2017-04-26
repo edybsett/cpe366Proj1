@@ -27,6 +27,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.servlet.http.HttpSession;
 import javax.inject.Named;
 import java.util.Date;
 import java.util.TimeZone;
@@ -278,28 +279,27 @@ public class Login implements Serializable {
         if (!result.next()) {
             return;
         }
-        String getTitle = result.getString(1);
+        String getTitle = result.getString("title");
         result.close();
         
         con.close();
         
-        switch (getTitle) {
-            case "admin":
-                setDestination = getTitle;
-                break;
-            case "employee":
-                setDestination = getTitle;
-                break;
-            case "customer":
-                setDestination = getTitle;
-                break;
-            default:
-                FacesMessage errorMessage = new FacesMessage("Wrong login/password");
-                throw new ValidatorException(errorMessage);
+        setDestination = getTitle;
+        
+        if (setDestination == null) {
+            FacesMessage errorMessage = new FacesMessage("Wrong login/password");
+            throw new ValidatorException(errorMessage);
         }
-                
+        
+        HttpSession session= (HttpSession)context.getExternalContext().getSession(false);
+        session.setAttribute("username", login);
     }
-
+    
+    public String logout() {
+        Util.invalidateUserSession();
+        return "index";
+    }
+    
     public String go() {
       //  Util.invalidateUserSession();
         return setDestination;

@@ -40,13 +40,22 @@ h4 { margin: 10px 0 }
    margin: 3em 0;
 }
 
-.bannerText{
+.bannerUname{
     font-family: Tahoma, Geneva, sans-serif;
     color: #ffffff; 
     position: absolute;
     bottom: 10px;
     right: 1em;
     font-size: 14pt;
+}
+
+.bannerLogout{
+    font-family: Tahoma, Geneva, sans-serif;
+    color: #ffffff;
+    position: absolute;
+    bottom: 30px;
+    right: 0.5em;
+    font-size: 8pt;
 }
 
 .bannerLogo{
