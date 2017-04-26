@@ -77,6 +77,8 @@ and open the template in the editor.
 
         </h:dataTable>
 
+        <h2>Add Special Rates</h2>
+        
         <br><h3>Leave Room Number blank for Hotel Wide</h3></br>
         <h:form>
             
@@ -115,13 +117,16 @@ and open the template in the editor.
                                            id="price"/>
 
                 <h:message for="price" style="color:red;margin:8px;"/>
-
             </h:panelGrid>
+        
+                <h:selectBooleanCheckbox value="#{specialRates.delete}"/> DELETE OR NAH    
             <h:panelGrid>
-                <h:commandButton value="Go" action="#{specialRates.addSpecialRate}"/>
+                <h:commandButton value="Go" action="#{specialRates.SpecialRate}"/>
             </h:panelGrid>
-        </h:form>
+               
 
+        </h:form>
+        
     </h:body>
 
 
