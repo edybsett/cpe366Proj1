@@ -24,7 +24,8 @@
                     <h:selectOneMenu value="#{selector.choice}">
                         <f:selectItems value="#{selector.choices}"/>
                     </h:selectOneMenu>
-                    <h:commandButton value = "Go" action="#{selector.transition()}"/>
+                    <h:commandButton value = "Go" action="#{selector.transition()}"
+                                     styleClass="button"/>
                 </h:form>
             </ui:define>
 
