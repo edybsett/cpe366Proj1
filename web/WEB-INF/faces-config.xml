@@ -113,10 +113,16 @@
             <to-view-id>/index.xhtml </to-view-id>
         </navigation-case>
 
+        <naviagation-case>
+            <from-outcome>changeBasePrices</from-outcome>
+            <to-view-id>/basePrices.xhtml</to-view-id>
+        </naviagation-case>
+        
         <navigation-case>
             <from-outcome>showSpecialRates</from-outcome>
             <to-view-id>/specialrates.xhtml </to-view-id>
         </navigation-case>
+        
         <navigation-case>
             <from-outcome>register</from-outcome>
             <to-view-id>/newCustomer.xhtml </to-view-id>
@@ -198,6 +204,16 @@
         <navigation-case>
             <from-outcome>refresh</from-outcome>
             <to-view-id>/specialrates.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>
+            /changeBasePrices.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome> refresh</from-outcome>
+            <to-view-id>/changeBasePrices.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
     
