@@ -57,6 +57,16 @@
         <managed-bean-class>Form</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>fees</managed-bean-name>
+        <managed-bean-class>Fees</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>resxfee</managed-bean-name>
+        <managed-bean-class>ResxFee</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
     
     
     

@@ -172,7 +172,7 @@ public class Reservation implements Serializable {
     }
     
      public String removeReservation() throws SQLException {
-        resid = Integer.parseInt(residUI.getLocalValue().toString());
+        
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
