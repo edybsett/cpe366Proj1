@@ -27,6 +27,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.servlet.http.HttpSession;
 import javax.inject.Named;
 import java.util.Date;
 import java.util.TimeZone;
@@ -141,121 +142,10 @@ public class Login implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
-    public String createCustomer() throws SQLException, ParseException {
-        Connection con = dbConnect.getConnection();
-
-        if (con == null) {
-            throw new SQLException("Can't get database connection");
-        }
-        con.setAutoCommit(false);
-
-        Statement statement = con.createStatement();
-
-        PreparedStatement preparedStatement = con.prepareStatement("Insert into Customer values(?,?,?,?,?)");
-        preparedStatement.setInt(1, lid);
-        preparedStatement.setString(2, firstName);
-        preparedStatement.setString(3, firstName);
-        preparedStatement.setString(4, address);
-        preparedStatement.setString(5, email);
-        preparedStatement.executeUpdate();
-        statement.close();
-        
-        Statement getids = con.createStatement();
-        PreparedStatement prepedId = con.prepareStatement("select id from Login");
-        ResultSet result = prepedId.executeQuery();
-            if (!result.next()) {
-                return null;
-            }
-        lid = result.getInt(1);
-        result.close();
-        con.commit();
-        con.close();
-        //Util.invalidateUserSession();
-        return "main";
-    }
+    
     
     public String createLogin() throws SQLException, ParseException {
-       Connection con = dbConnect.getConnection();
-
-        if (con == null) {
-            throw new SQLException("Can't get database connection");
-        }
-        con.setAutoCommit(false);
-
-        Statement statement = con.createStatement();
-
-        PreparedStatement preparedStatement = con.prepareStatement("Insert into Login(username, password, title) values(?,?,?)");
-        preparedStatement.setString(1, login);
-        preparedStatement.setString(2, password);
-        preparedStatement.setString(3, "customer");
-        preparedStatement.executeUpdate();
-        statement.close();
-        con.commit();
-        
-        
-        Statement getids = con.createStatement();
-        PreparedStatement prepedId = con.prepareStatement("SELECT id from Login WHERE username = ? AND password = ?");
-        prepedId.setString(1, login);
-        prepedId.setString(2, password);
-        ResultSet result = prepedId.executeQuery();
-            if (!result.next()) {
-                return null;
-            }
-        lid = result.getInt(1);
-        result.close();
-        con.commit();
-        
-        
-        
-        con.close();
-        Util.invalidateUserSession();
-        return createCustomer();
-    }
-
-    public String createEmployee() throws SQLException, ParseException {
-       Connection con = dbConnect.getConnection();
-
-        if (con == null) {
-            throw new SQLException("Can't get database connection");
-        }
-        con.setAutoCommit(false);
-
-        Statement statement = con.createStatement();
-
-        PreparedStatement preparedStatement = con.prepareStatement("Insert into Login(username, password, title) values(?,?,?)");
-        preparedStatement.setString(1, login);
-        preparedStatement.setString(2, password);
-        preparedStatement.setString(3, "employee");
-        preparedStatement.executeUpdate();
-        statement.close();
-        con.commit();
-        con.close();
-        Util.invalidateUserSession();
-        return "admin";
-    }
-    
-    public String createAdmin() throws SQLException, ParseException {
-       Connection con = dbConnect.getConnection();
-
-        if (con == null) {
-            throw new SQLException("Can't get database connection");
-        }
-        con.setAutoCommit(false);
-
-        Statement statement = con.createStatement();
-
-        PreparedStatement preparedStatement = con.prepareStatement("Insert into Login(username, password, title) values(?,?,?)");
-        preparedStatement.setString(1, login);
-        preparedStatement.setString(2, password);
-        preparedStatement.setString(3, "admin");
-        preparedStatement.executeUpdate();
-        statement.close();
-        con.commit();
-        con.close();
-        //Util.invalidateUserSession();
-        return "admin";
+        return new Form(login, password).createLogin();
     }
     
     public void validate(FacesContext context, UIComponent component, Object value)
@@ -278,28 +168,24 @@ public class Login implements Serializable {
         if (!result.next()) {
             return;
         }
-        String getTitle = result.getString(1);
+        String getTitle = result.getString("title");
         result.close();
         
         con.close();
         
-        switch (getTitle) {
-            case "admin":
-                setDestination = getTitle;
-                break;
-            case "employee":
-                setDestination = getTitle;
-                break;
-            case "customer":
-                setDestination = getTitle;
-                break;
-            default:
-                FacesMessage errorMessage = new FacesMessage("Wrong login/password");
-                throw new ValidatorException(errorMessage);
+        setDestination = getTitle;
+        
+        if (setDestination == null) {
+            FacesMessage errorMessage = new FacesMessage("Wrong login/password");
+            throw new ValidatorException(errorMessage);
         }
-                
     }
-
+    
+    public String logout() {
+        Util.invalidateUserSession();
+        return "logout";
+    }
+    
     public String go() {
       //  Util.invalidateUserSession();
         return setDestination;

@@ -32,7 +32,16 @@ public class Rooms {
     private String view;
     private String bed;
     private float basePrice;
+    private boolean change; 
 
+    public boolean isChange() {
+        return change;
+    }
+    
+    public void setChange(boolean x) {
+        this.change = x;
+    }    
+    
     public Integer getRmNum() {
         return rmNum;
     }
@@ -74,7 +83,7 @@ public class Rooms {
 
         PreparedStatement ps
                 = con.prepareStatement(
-                        "select * from Room");
+                        "select * from Room ORDER BY rmnum");
 
         //get customer data from database
         ResultSet result = ps.executeQuery();
@@ -100,13 +109,71 @@ public class Rooms {
         if (con == null) {
             throw new SQLException("Can't get database connection");
         }
-
+        con.setAutoCommit(false);
+        if(change == true) {
         PreparedStatement ps
-                = con.prepareStatement("update Room set price=? where rmnum=?");
-        ps.setFloat(1, basePrice);
-        ps.setInt(2, rmNum);
-        ResultSet result = ps.executeQuery();
-        result.close();
+                = con.prepareStatement("update Room set price=? where rmnum=? OR view=? OR bed=?");
+            ps.setFloat(1, basePrice);
+            ps.setInt(2, rmNum);
+            ps.setString(3, view);
+            ps.setString(4, bed);
+            ps.executeUpdate();
+        }
+        else {
+            if(rmNum != null) {
+              
+                if(view.compareTo("") != 0 || bed.compareTo("") !=0) {
+                    String sql = "Update Room set price = " + basePrice + " where ";
+                    if(view.compareTo("") != 0 ){
+                        sql = sql + " view = '" + view + "' AND ";
+                    }
+                    else {
+                        sql = sql + " view SIMILAR to '%' AND "; 
+                    }
+                    if(bed.compareTo("") != 0) {
+                        sql = sql + " bed = '" + bed + "' OR ";
+                    }
+                    else {
+                        sql = sql + " bed SIMILAR to '%' OR ";
+                    }
+                    if(rmNum != null) {
+                        sql = sql + " rmNum = " + rmNum + ";";
+                    }
+                    else {
+                        sql = sql + "rmNum = 0;";
+                    }
+                    Statement statement = con.createStatement();
+                    System.out.println(sql);
+                    statement.executeUpdate(sql);
+                }
+                else {
+                    String sql = "Update Room set price = " + basePrice + "where rmNum = " + rmNum + ";";
+                    Statement statement = con.createStatement();
+                    System.out.println(sql);
+                    statement.executeUpdate(sql);
+                }
+            }
+            else {
+                if(view != null || bed != null) {
+                    String sql = "Update Room set price = " + basePrice + " where ";
+                    if(view.compareTo("") != 0 ){
+                        sql = sql + " view = '" + view + "' AND ";
+                    }
+                    else {
+                        sql = sql + " view SIMILAR to '%' AND "; 
+                    }
+                    if(bed.compareTo("") != 0) {
+                        sql = sql + " bed = '" + bed + "';";
+                    }
+                    else {
+                        sql = sql + " bed SIMILAR to '%';";
+                    }
+                    Statement statement = con.createStatement();
+                    System.out.println(sql);
+                    statement.executeUpdate(sql);
+                }
+            }
+        }
         con.commit();
         con.close();
         return "refresh";

@@ -46,6 +46,10 @@ public class Admin {
         return "addAdmin";
     }
     
+    public String changeBasePrices() {
+        return "changeBasePrices";
+    }
+    
     public String showEmployeeList(){
         return "showEmployeeList";
     }

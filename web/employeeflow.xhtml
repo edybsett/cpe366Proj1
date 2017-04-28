@@ -24,8 +24,12 @@
                 </h:column>
 
                 <h:column>
-                    <f:facet name="header"> Customer ID </f:facet>
-                        #{res.custid}
+                    <f:facet name="header"> Customer Last Name </f:facet>
+                        #{res.custLast}
+                </h:column>
+                <h:column>
+                    <f:facet name="header"> Customer First Name </f:facet>
+                        #{res.custFirst}
                 </h:column>
                 <h:column>
                     <f:facet name="header"> Room </f:facet>
@@ -44,6 +48,96 @@
                         #{res.totalCost}
                 </h:column>
             </h:dataTable>
+            <br></br>
+            <h:form>
+                <h:panelGrid columns="3">
+
+                    Reservation Check-in: <h:inputText value="#{reservation.resid}" required ="true"
+                                              requiredMessage="Your must enter reservation number"
+                                              id="resid"/>
+
+
+                    <h:message for="resid" style="color:red;margin:8px;"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:commandButton value="Check In" action="#{reservation.checkIn}"
+                                     styleClass="button"/>
+                </h:panelGrid>
+            </h:form>
+            <br></br>
+            <h:form>
+                <h:panelGrid columns="3">
+
+                    Reservation Check-out: <h:inputText value="#{reservation.resid}" required ="true"
+                                              requiredMessage="Your must enter reservation number"
+                                              id="resid"/>
+
+
+                    <h:message for="resid" style="color:red;margin:8px;"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:commandButton value="Check Out" action="#{reservation.checkOut}"
+                                     styleClass="button"/>
+                </h:panelGrid>
+            </h:form>
+            <br></br>
+            <h:form>
+                <h:panelGrid columns="3">
+
+                    Delete Reservation: <h:inputText value="#{reservation.resid}" required ="true"
+                                              requiredMessage="Your must enter reservation number"
+                                              id="resid"/>
+
+
+                    <h:message for="resid" style="color:red;margin:8px;"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:commandButton value="Remove" action="#{reservation.removeReservation}"
+                                     styleClass="button"/>
+                </h:panelGrid>
+            </h:form>
+            <br></br>
+            <h2>Additions</h2>
+            <h:dataTable value="#{fees.getFees()}" var="fee" border="1">
+                <h:column>
+                    <f:facet name="header"> Id </f:facet>
+                        #{fee.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header"> Description </f:facet>
+                        #{fee.name}
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header"> Cost </f:facet>
+                        #{fee.price}
+                </h:column>
+            </h:dataTable>
+            <br></br>
+            <h:form>
+                <h:panelGrid columns="3">
+
+                    Addition Id: <h:inputText value="#{resxfee.feeid}" required ="true"
+                                              requiredMessage="Your must enter id number"
+                                              id="feeid"/>
+
+
+                    <h:message for="feeid" style="color:red;margin:8px;"/>
+                </h:panelGrid>
+                <h:panelGrid columns="3">
+
+                    Reservation Id: <h:inputText value="#{resxfee.resid}" required ="true"
+                                              requiredMessage="Your must enter reservation number"
+                                              id="resid"/>
+
+
+                    <h:message for="resid" style="color:red;margin:8px;"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:commandButton value="Add" action="#{resxfee.addFeeToReservation}"
+                                     styleClass="button"/>
+                </h:panelGrid>
+            </h:form>
         </ui:define>
         </ui:composition>
     </h:body>

@@ -16,9 +16,14 @@
                 <h:outputStylesheet name="css/stylesheet.css"/>
                 <div class="bannerContainer">
                     <img src="resources/common/HotelBanner.png"/>
-                    <div class="bannerText">
+                    <div class="bannerUname">
                         <ui:insert name="uname">
-                        <h:outputText value="#{login.getLogin()}"/>
+                            <h:form>
+                                <h:outputText value="#{login.getLogin()}"/>
+                                <h:commandButton value="(Logout)" 
+                                                 action="#{login.logout}"
+                                                 styleClass="bannerLogout"/>
+                            </h:form>
                         </ui:insert>
                     </div>
                 </div>

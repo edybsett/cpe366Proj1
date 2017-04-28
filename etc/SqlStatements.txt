@@ -53,3 +53,9 @@ select r.resid, sum(
 from reservation r, specialrates s
 where r.roomid = s.rmnum
 group by r.resid;
+
+
+/* Gets the sum of all fees associated with a Reservation */
+SELECT sum(price) FROM Reservation, Fees, ResXFee
+where Reservation.resId = ResXFee.resId AND
+      feeId = Fees.id;
