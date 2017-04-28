@@ -57,7 +57,7 @@ public class ResxFee implements Serializable {
             throw new SQLException("Can't get database connection");
         }
         Statement ps = con.createStatement();
-        ps.executeUpdate("insert into ResxFee(resid, feeid) values (" + resid + ", " + feeid + ")");
+        ps.executeUpdate("insert into ResxFee(resid, feeid) values (" + resid + "," + feeid + ")");
         
         ps.close();
         //con.commit();
