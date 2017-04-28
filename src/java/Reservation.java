@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.annotation.ManagedBean;
 import javax.faces.application.FacesMessage;
@@ -43,7 +44,8 @@ public class Reservation implements Serializable {
     private String custFirst;
     private String custLast;
     private float basecost; //FYI this should be set ahead of time,
-
+    private Date UIstart;
+    private Date UIend;
     
                             //Like when the reservation is created the cost should be set
                             //Do not use the special rates table/reservation transformation table
@@ -98,6 +100,22 @@ public class Reservation implements Serializable {
 
     public void setEnddate(Date enddate) {
         this.enddate = enddate;
+    }
+    
+    public Date getUIend() {
+        return UIend;
+    }
+
+    public void setUIend(Date enddate) {
+        this.UIend = enddate;
+    }
+    
+    public Date getUIstart() {
+        return UIstart;
+    }
+
+    public void setUIstart(Date startdate) {
+        this.UIstart = startdate;
     }
 
     public float getBasecost() {
@@ -228,6 +246,61 @@ public class Reservation implements Serializable {
         result.close();
         con.close();
         return list;
+    }
+    
+    
+    
+    public String findAvailable(){
+        return "refresh";
+    }
+    
+    public List<Rooms> getAvailableRooms() throws SQLException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        
+        PreparedStatement ps = con.prepareStatement("select rmNum, view, price, bed from  Room WHERE rmnum NOT IN  (select roomid AS rmnum FROM Reservation WHERE ((? <= enddate AND ? >= startDate) OR (? >= startdate AND ? <= enddate) OR (startdate >= ? AND startdate <= ?))) ORDER BY rmnum");
+        
+        if (UIstart == null)
+        {
+            UIstart = new Date(System.currentTimeMillis());
+            UIend = new Date(System.currentTimeMillis());
+        }
+        ps.setDate(1, new java.sql.Date(DateUtil.addDays(UIstart, 1).getTime()));
+        ps.setDate(2, new java.sql.Date(DateUtil.addDays(UIstart, 1).getTime()));
+        ps.setDate(3, new java.sql.Date(DateUtil.addDays(UIend, 1).getTime()));
+        ps.setDate(4, new java.sql.Date(DateUtil.addDays(UIend, 1).getTime()));
+        ps.setDate(5, new java.sql.Date(DateUtil.addDays(UIstart, 1).getTime()));                
+        ps.setDate(6, new java.sql.Date(DateUtil.addDays(UIend, 1).getTime()));
+        ResultSet result = ps.executeQuery();
+        
+        List<Rooms> list = new ArrayList<Rooms>();
+
+        while (result.next()) {
+            Rooms room = new Rooms();
+            room.setRmNum(result.getInt("rmNum"));
+            room.setView(result.getString("view"));
+            //rate.setEndDate(result.getDate("endDate"));
+            
+            room.setBasePrice(result.getFloat("price"));
+            room.setBed(result.getString("bed"));
+            list.add(room);
+        }
+        result.close();
+        con.close();
+        return list;
+    }
+    
+        public static class DateUtil  {
+        public static Date addDays(Date date, int days)
+        {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            cal.add(Calendar.DATE, days); //minus number would decrement the days
+            return cal.getTime();
+        }
     }
     
 }

@@ -12,6 +12,11 @@
             
         <ui:define name="body">
             <h5>List of reservations</h5>
+            <h:form>
+                <h:panelGrid>
+                    <h:commandButton value="Make a Reservations" action="#{customer.makeReservation}"/>
+                </h:panelGrid>
+            </h:form>
         </ui:define>
         </ui:composition>
     </h:body>

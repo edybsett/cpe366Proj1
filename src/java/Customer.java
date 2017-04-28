@@ -242,4 +242,8 @@ public class Customer implements Serializable {
         con.close();
         return false;
     }
+    
+    public String makeReservation(){
+        return "reservation";
+    }
 }
