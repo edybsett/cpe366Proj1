@@ -12,6 +12,29 @@
             
         <ui:define name="body">
             <h5>List of reservations</h5>
+        <h:dataTable value="#{customer.getReservations()}" var="r" border="1">
+            <h:column>
+                <f:facet name="header"> Reservation ID </f:facet>
+                    #{r.resid}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header"> Room Number </f:facet>
+                    #{r.roomid}
+            </h:column>
+
+            <h:column>
+                <f:facet name="header"> Start Date </f:facet>
+                    #{r.startdate}
+            </h:column>             
+
+            <h:column>
+                <f:facet name="header"> End Date </f:facet>
+                    #{r.enddate}
+            </h:column> 
+
+        </h:dataTable>
+            
             <h:form>
                 <h:panelGrid>
                     <h:commandButton value="Make a Reservations" action="#{customer.makeReservation}"/>
