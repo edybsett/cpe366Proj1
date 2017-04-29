@@ -161,7 +161,7 @@ public class Login implements Serializable {
 
         PreparedStatement ps
                     = con.prepareStatement(
-                            "select title from Login where username=? and password=?");
+                            "select title, id from Login where username=? and password=?");
         ps.setString(1, login);
         ps.setString(2, password);
         ResultSet result = ps.executeQuery();
@@ -169,6 +169,7 @@ public class Login implements Serializable {
             return;
         }
         String getTitle = result.getString("title");
+        setlid(result.getInt("id"));
         result.close();
         
         con.close();
