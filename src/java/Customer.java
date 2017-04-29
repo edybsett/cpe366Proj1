@@ -43,6 +43,54 @@ public class Customer implements Serializable {
     private String address;
     private String email;
 
+    
+    private int resid;
+    private int roomid;
+    private int custid;
+    private Date startdate;
+    private Date enddate;
+    
+    public int getResid() {
+        return resid;
+    }
+
+    public void setResid(int resid) {
+        this.resid = resid;
+    }
+
+    public int getRoomid() {
+        return roomid;
+    }
+
+    public void setRoomid(int roomid) {
+        this.roomid = roomid;
+    }
+    
+    public int getCustid() {
+        return custid;
+    }
+
+    public void setCustid(int custid) {
+        this.custid = custid;
+    }
+
+    public Date getStartdate() {
+        return startdate;
+    }
+
+    public void setStartdate(Date startdate) {
+        this.startdate = startdate;
+    }
+
+    public Date getEnddate() {
+        return enddate;
+    }
+
+    public void setEnddate(Date enddate) {
+        this.enddate = enddate;
+    }
+    
+    
     public Integer getCustomerID() throws SQLException {
         if (cid == null) {
             Connection con = dbConnect.getConnection();
@@ -166,6 +214,38 @@ public class Customer implements Serializable {
         address = result.getString("address");
         email = result.getString("email");
         return this;
+    }
+    
+    public List<Customer> getReservations() throws SQLException {
+        Connection con = dbConnect.getConnection();
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        List<Customer> list = new ArrayList<Customer>();
+        PreparedStatement ps
+                = con.prepareStatement(
+                        "select resid, roomid, startdate, enddate from reservation where " + "custId = " + login.getlid() + ";");        
+        
+
+        //get customer data from database
+        ResultSet result = ps.executeQuery();
+
+     
+        while (result.next()) {
+            Customer cust = new Customer();
+
+            cust.setResid(result.getInt("resid"));
+            cust.setRoomid(result.getInt("roomid"));
+            cust.setStartdate(result.getDate("startdate"));
+            cust.setEnddate(result.getDate("enddate"));
+   
+            //store all data into a List
+            list.add(cust);
+        }
+        System.out.println("list " + list.size() + "cust id " + login.getlid());
+        result.close();
+        con.close();
+        return list;
     }
 
     public List<Customer> getCustomerList() throws SQLException {
