@@ -226,6 +226,7 @@ public class Reservation implements Serializable {
             throw new SQLException("Can't get database connection");
         }
         Statement ps = con.createStatement();
+        ps.executeUpdate("delete from resxfee where resid = " + resid);
         ps.executeUpdate("delete from reservation where resid = " + resid);
         
         ps.close();
