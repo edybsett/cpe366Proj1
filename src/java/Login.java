@@ -166,7 +166,8 @@ public class Login implements Serializable {
         ps.setString(2, password);
         ResultSet result = ps.executeQuery();
         if (!result.next()) {
-            return;
+            FacesMessage errorMessage = new FacesMessage("Wrong login/password");
+            throw new ValidatorException(errorMessage);
         }
         String getTitle = result.getString("title");
         setlid(result.getInt("id"));
@@ -177,8 +178,7 @@ public class Login implements Serializable {
         setDestination = getTitle;
         
         if (setDestination == null) {
-            FacesMessage errorMessage = new FacesMessage("Wrong login/password");
-            throw new ValidatorException(errorMessage);
+            
         }
     }
     

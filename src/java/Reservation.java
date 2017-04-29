@@ -189,6 +189,35 @@ public class Reservation implements Serializable {
         return "refresh";
     }
     
+    public String makeReservation() throws SQLException {
+        
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+        
+        
+
+        Statement statement = con.createStatement();
+        PreparedStatement preparedStatement = con.prepareStatement("Insert into Reservation(roomid, custid, startdate, enddate, basecost, fees) values(?,?,?,?,?,?)");
+        preparedStatement.setInt(1, roomid);
+        preparedStatement.setInt(2, custid);
+        preparedStatement.setDate(3, new java.sql.Date(startdate.getTime()));
+        preparedStatement.setDate(4, new java.sql.Date(enddate.getTime()));
+        preparedStatement.setFloat(5, 100);
+        preparedStatement.setFloat(6, 0);
+        preparedStatement.executeUpdate();
+        statement.close();
+        con.commit();
+        
+  
+        con.close();
+        Util.invalidateUserSession();
+        return "made";
+    }
+    
      public String removeReservation() throws SQLException {
         
         Connection con = dbConnect.getConnection();
@@ -197,6 +226,7 @@ public class Reservation implements Serializable {
             throw new SQLException("Can't get database connection");
         }
         Statement ps = con.createStatement();
+        ps.executeUpdate("delete from resxfee where resid = " + resid);
         ps.executeUpdate("delete from reservation where resid = " + resid);
         
         ps.close();
