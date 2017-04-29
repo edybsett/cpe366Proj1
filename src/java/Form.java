@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
+import java.util.Date;
 import javax.annotation.ManagedBean;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.SessionScoped;
@@ -33,6 +34,10 @@ public class Form {
     private String firstName;
     private String lastName;
     private String address;
+    private String ccn;
+    private Date expiration;
+    private Integer crc;
+    private String ccnType;
     private int    id;
     private DBConnect dbConnect = new DBConnect();
     
@@ -141,6 +146,64 @@ public class Form {
         this.id = id;
     }
     
+     /**
+     * @param creditCrc the crc number to set
+     */
+    public void setCrc(Integer creditCrc){
+        this.crc = creditCrc;
+    }
+    
+    /**
+     * @return the crc code
+     */
+    public Integer getCrc(){
+        return crc;
+    }
+    
+    /**
+     * @param credit the credit card number to set
+     */
+    public void setCcn(String credit){
+        this.ccn = credit;
+    }
+    
+    /**
+     * @return the Credit card number
+     */
+    public String getCcn(){
+        return ccn;
+    }
+    
+    
+    
+    /**
+     * @return the Credit Card type
+     */
+    public String getCcnType() {
+        return ccnType;
+    }
+
+    /**
+     * @param type the Credit card type to set
+     */
+    public void setCcnType (String type) {
+        this.password = type;
+    }
+    
+    /**
+     * @param date the expiration date to set
+     */
+    public void setExpiration(Date date){
+        this.expiration = date;
+    }
+    
+    /**
+     * @return the expiration
+     */
+    public Date getExpiration(){
+        return expiration;
+    }
+    
     
     public String createEmployee() throws SQLException, ParseException {
        Connection con = dbConnect.getConnection();
@@ -213,6 +276,16 @@ public class Form {
             }
         id = result.getInt(1);
         result.close();
+        con.commit();
+        
+        
+        PreparedStatement bankStatement = con.prepareStatement("Insert into Banking values(?, ?, ?, ?, ?)");
+        bankStatement.setInt(1,id);
+        bankStatement.setString(2, ccn);
+        bankStatement.setInt(3, crc);
+        bankStatement.setDate(4, new java.sql.Date(expiration.getTime()));
+        bankStatement.setString(5, "Visa");
+        bankStatement.executeUpdate();
         con.commit();
         con.close();
         //Util.invalidateUserSession();

@@ -35,8 +35,6 @@
             </h:column> 
             </h:dataTable>
 
-            "#{reservation.UIstart}"
-            "#{reservation.UIend}"
             <h:form>
                 <h:panelGrid>
                     Start Date: <h:inputText value="#{reservation.UIstart}" required ="true"   
@@ -59,7 +57,34 @@
             </h:panelGrid>
             </h:form>
                             
-                            
+         <h:form>
+                 <h:panelGrid>
+                    Room Number: <h:inputText value="#{reservation.roomid}" required ="true"   
+                    requiredMessage="Your must enter a room number"
+                    converterMessage="illeagal blah"
+                                         id="roomid">
+                </h:inputText>
+                    Start Date: <h:inputText value="#{reservation.startdate}" required ="true"   
+                    requiredMessage="Your must enter start date"
+                    converterMessage="illeagal blah"
+                                         id="start">
+                <f:convertDateTime pattern="yyyy/MM/dd"/>
+                </h:inputText>
+                <h:message for="start" style="color:red;margin:8px;"/>
+
+                End Date: <h:inputText value="#{reservation.enddate}" required ="true"
+                                       requiredMessage="Your must enter end date"
+                                       converterMessage="illeagal blah"
+                                       id="end">
+                <f:convertDateTime pattern="yyyy/MM/dd"/>
+                </h:inputText>
+                </h:panelGrid>
+             
+            <h:panelGrid>
+                <h:commandButton value="Make" action="#{reservation.makeReservation}"/>
+            </h:panelGrid>
+            </h:form>
+                    
         </ui:define>
         </ui:composition>
     </h:body>

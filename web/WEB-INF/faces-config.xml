@@ -211,6 +211,10 @@
             <from-outcome>refresh</from-outcome>
             <to-view-id>/makeReservation.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>made</from-outcome>
+            <to-view-id>/customerflow.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     
     <navigation-rule>
