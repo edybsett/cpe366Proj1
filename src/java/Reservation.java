@@ -381,20 +381,14 @@ public class Reservation implements Serializable {
         query       += "WHERE rmNum NOT IN ";
         query       += "(SELECT roomid AS rmnum ";
         query       += "FROM Reservation WHERE ";
-        query       += "((? <= enddate AND ? >= startDate) OR ";
-        query       += "(? >= startdate AND ? <= enddate) OR ";
-        query       += "(startdate >= ? AND startdate <= ?))";
-        query       += "AND view=? AND bed=?) ";
+        query       += "GREATEST(startdate, ?) < LEAST(enddate, ?))";
+        query       += "AND view=? AND bed=? ";
         query       += "ORDER BY rmNum";
         ps = con.prepareStatement(query);
         ps.setDate(1, new java.sql.Date(startdate.getTime()));
-        ps.setDate(2, new java.sql.Date(startdate.getTime()));
-        ps.setDate(3, new java.sql.Date(enddate.getTime()));
-        ps.setDate(4, new java.sql.Date(enddate.getTime()));
-        ps.setDate(5, new java.sql.Date(startdate.getTime()));                
-        ps.setDate(6, new java.sql.Date(enddate.getTime()));
-        ps.setString(7, view);
-        ps.setString(8, bed);
+        ps.setDate(2, new java.sql.Date(enddate.getTime()));
+        ps.setString(3, view);
+        ps.setString(4, bed);
         ResultSet rs = ps.executeQuery();
         
         if (rs.next()) {
@@ -561,14 +555,13 @@ public class Reservation implements Serializable {
             throw new SQLException("Can't get database connection");
         }
         
-        String query = "SELECT DISTINCT view, bed, price FROM Room\n";
+        String query = "SELECT rmNum, view, bed, price FROM Room\n";
         query       += "WHERE rmNum NOT IN ";
         query       += "(SELECT roomid AS rmnum ";
         query       += "FROM Reservation WHERE ";
-        query       += "((? <= enddate AND ? >= startDate) OR ";
-        query       += "(? >= startdate AND ? <= enddate) OR ";
-        query       += "(startdate >= ? AND startdate <= ?))) ";
-        query       += "ORDER BY view,bed,price";
+        query       += "GREATEST(startdate, ?) < LEAST(enddate, ?))";
+        query       += "AND view=? AND bed=? ";
+        query       += "ORDER BY rmNum";
         PreparedStatement ps = con.prepareStatement(query);
         
         // See getters for why I did this
@@ -576,11 +569,9 @@ public class Reservation implements Serializable {
         enddate   = getEnddate();
         
         ps.setDate(1, new java.sql.Date(startdate.getTime()));
-        ps.setDate(2, new java.sql.Date(startdate.getTime()));
-        ps.setDate(3, new java.sql.Date(enddate.getTime()));
-        ps.setDate(4, new java.sql.Date(enddate.getTime()));
-        ps.setDate(5, new java.sql.Date(startdate.getTime()));                
-        ps.setDate(6, new java.sql.Date(startdate.getTime()));
+        ps.setDate(2, new java.sql.Date(enddate.getTime()));
+        ps.setString(3, view);
+        ps.setString(4, bed);
         ResultSet result = ps.executeQuery();
         
         List<Rooms> list = new ArrayList<Rooms>();
