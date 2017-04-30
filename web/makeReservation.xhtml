@@ -46,7 +46,10 @@
             <br/>
       
             <h:dataTable value="#{reservation.getAvailableRooms()}" var="r" border="1">
-
+                <h:column>
+                    <f:facet name="header">Room Number </f:facet>
+                    #{r.rmNum}
+                </h:column>
             <h:column>
                 <f:facet name="header"> View </f:facet>
                     #{r.view}

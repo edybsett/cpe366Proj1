@@ -381,7 +381,7 @@ public class Reservation implements Serializable {
         query       += "WHERE rmNum NOT IN ";
         query       += "(SELECT roomid AS rmnum ";
         query       += "FROM Reservation WHERE ";
-        query       += "GREATEST(startdate, ?) < LEAST(enddate, ?))";
+        query       += "GREATEST(startdate, ?) <= LEAST(enddate, ?))";
         query       += "AND view=? AND bed=? ";
         query       += "ORDER BY rmNum";
         ps = con.prepareStatement(query);
@@ -484,7 +484,7 @@ public class Reservation implements Serializable {
         ps.executeUpdate();
         
         /* Now get the Reservation id */
-        query = "SELECT id from Reservation ";
+        query = "SELECT resid from Reservation ";
         query += "WHERE roomid=? AND custid=? ";
         query += "AND startdate = ? AND enddate = ? ";
         query += "AND basecost = ?";
@@ -497,7 +497,7 @@ public class Reservation implements Serializable {
         ResultSet rs = ps.executeQuery();
         
         if (rs.next()) {
-            int resid = rs.getInt("id");
+            int resid = rs.getInt("resid");
             /* Now insert a 0 fee */
             query = "INSERT INTO ResXFee(resid, feeid) ";
             query += "VALUES(?, 0)";
@@ -590,7 +590,6 @@ public class Reservation implements Serializable {
         query       += "(SELECT roomid AS rmnum ";
         query       += "FROM Reservation WHERE ";
         query       += "GREATEST(startdate, ?) < LEAST(enddate, ?))";
-        query       += "AND view=? AND bed=? ";
         query       += "ORDER BY rmNum";
         PreparedStatement ps = con.prepareStatement(query);
         
@@ -600,8 +599,6 @@ public class Reservation implements Serializable {
         
         ps.setDate(1, new java.sql.Date(startdate.getTime()));
         ps.setDate(2, new java.sql.Date(enddate.getTime()));
-        ps.setString(3, view);
-        ps.setString(4, bed);
         ResultSet result = ps.executeQuery();
         
         List<Rooms> list = new ArrayList<Rooms>();
@@ -611,8 +608,10 @@ public class Reservation implements Serializable {
             room.setView(result.getString("view"));            
             room.setBasePrice(result.getFloat("price"));
             room.setBed(result.getString("bed"));
+            room.setRmNum(result.getInt("rmNum"));
             list.add(room);
         }
+        /* SET the room this person is going to get */
         result.close();
         con.close();
         return list;
