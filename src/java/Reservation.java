@@ -1,4 +1,3 @@
-
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -47,10 +46,8 @@ public class Reservation implements Serializable {
     private int resIdForBill;
     private String bed;
     private String view;
-    
     private UIInput residUI = new UIInput();
     private List<SpecialRates> sRates = new ArrayList<SpecialRates>();
-   
    
     /**
      * @return the sRates

@@ -114,7 +114,7 @@ public class Rooms {
         PreparedStatement ps
                 = con.prepareStatement("update Room set price=? where rmnum=? OR view=? OR bed=?");
             ps.setFloat(1, basePrice);
-            ps.setInt(2, rmNum);
+            ps.setInt(2, rmNum==null? 0 : rmNum);
             ps.setString(3, view);
             ps.setString(4, bed);
             ps.executeUpdate();
