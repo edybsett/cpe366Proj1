@@ -111,6 +111,10 @@
             <from-outcome>bill</from-outcome>
             <to-view-id>/employeebilling.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/index.xhtml </to-view-id>
+        </navigation-case>
             
     </navigation-rule>
     
@@ -121,6 +125,10 @@
         <navigation-case>
             <from-outcome>back</from-outcome>
             <to-view-id>/employeeflow.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/index.xhtml </to-view-id>
         </navigation-case>
             
     </navigation-rule>
