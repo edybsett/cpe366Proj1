@@ -40,13 +40,31 @@
                 <f:facet name ="header"> Bed Type </f:facet>
                     #{r.bed}
             </h:column>
+            <h:column>
+                <f:facet name ="header"> Checked in </f:facet>
+                    #{r.checked}
+            </h:column>
+            
             
         </h:dataTable>
             
             <h:form>
-                <h:panelGrid>
+                <h:panelGroup>
                     <h:commandButton value="Make a Reservation" action="#{customer.makeReservation}"/>
+                </h:panelGroup>
+            </h:form>
+            
+            <br> Cancel Reservation by ID</br>
+            <h:form>
+                <h:panelGrid columns="3">
+
+                    Reservation id: <h:inputText value="#{customer.resid}"
+                                            id="resid"/>
                 </h:panelGrid>
+                <h:panelGroup>
+                    <h:commandButton value="Cancel a Reservation" action="#{customer.cancelReservation}"/>
+                    NOTE - MUST NOT BE CHECKED IN TO CANCEL
+                </h:panelGroup>
             </h:form>
         </ui:define>
         </ui:composition>
