@@ -25,7 +25,7 @@ import java.util.TimeZone;
 import javax.el.ELContext;
 import javax.faces.bean.ManagedProperty;
 /**
- *
+ * Deals with all reservations and part of billing.
  * @author eric
  */
 @Named(value = "reservation")
@@ -50,6 +50,7 @@ public class Reservation implements Serializable {
                             //Do not use the special rates table/reservation transformation table
                             //to set this variable!
     private boolean checkedIn;
+    private int resIdForBill;
     
     private UIInput residUI = new UIInput();
 
@@ -174,19 +175,92 @@ public class Reservation implements Serializable {
     }
     
     public String checkOut() throws SQLException {
-        
+        resIdForBill = 0;
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
             throw new SQLException("Can't get database connection");
         }
+        
         Statement ps = con.createStatement();
         ps.executeUpdate("update reservation set checkedIn = false where resid = " + resid);
-        
+        resIdForBill = resid; 
         ps.close();
         //con.commit();
         con.close();
-        return "refresh";
+        return "bill";
+    }
+    
+    public String goBack() {
+        return "back";
+    }
+    
+
+    public List<Fees> showFees() throws SQLException {  //Has to do with the reservations more than it has to do for fees.
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+
+        PreparedStatement ps
+                = con.prepareStatement(
+                        "select f.name, f.price from fees f, resxfee r\n" +
+                        "where r.feeid = f.id and f.id != 0 and r.resid = " + resIdForBill);
+        ResultSet result = ps.executeQuery();
+        List<Fees> list = new ArrayList<Fees>();
+        while (result.next()) {
+            Fees fee = new Fees();
+            fee.setName(result.getString("name"));
+            fee.setPrice(result.getFloat("price"));
+            list.add(fee);
+        }
+        return list;
+    }
+    
+    public List<Reservation> showBillEmployeeSide() throws SQLException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+
+        PreparedStatement ps
+                = con.prepareStatement(
+                        "select r.resid, r.checkedIn, c.lastname, c.firstname, \n" +
+                        "  r.startdate, r.enddate, r.roomId, r.basecost, \n" +
+                        "  CASE WHEN f.sum = NULL \n" +
+                        "    THEN 0 \n" +
+                        "  ELSE f.sum \n" +
+                        "  END as fees \n" +
+                        "from reservation r, customer c, \n" +
+                        "    (SELECT sum(price), Reservation.resId FROM Reservation, Fees, ResXFee\n" +
+                        "      where Reservation.resId = ResXFee.resId AND\n" +
+                        "      feeId = Fees.id group by Reservation.resId) f\n" +
+                        "where r.custid = c.cid and r.resid = f.resid and r.resid = " + resIdForBill);
+
+        //get customer data from database
+        ResultSet result = ps.executeQuery();
+        List<Reservation> list = new ArrayList<Reservation>();
+
+        while (result.next()) {
+            Reservation rate = new Reservation();
+            rate.setResid(result.getInt("resid"));
+            rate.setCheckedIn(result.getBoolean("checkedIn"));
+           //rate.setCustid(result.getInt("custid"));
+            rate.setCustLast(result.getString("lastname"));
+            rate.setCustFirst(result.getString("firstname"));
+            rate.setStartdate(result.getDate("startdate"));
+            rate.setEnddate(result.getDate("enddate"));
+            rate.setRoomid(result.getInt("roomId"));
+            
+            rate.setTotalCost(result.getFloat("basecost") + result.getFloat("fees"));
+            list.add(rate);
+        }
+        result.close();
+        con.close();
+        return list;
+    
     }
     
     public String makeReservation() throws SQLException {

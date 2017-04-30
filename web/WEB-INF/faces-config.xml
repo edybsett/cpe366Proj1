@@ -107,6 +107,21 @@
             <from-outcome>refresh</from-outcome>
             <to-view-id>/employeeflow.xhtml</to-view-id>
         </navigation-case>
+        <navigation-case>
+            <from-outcome>bill</from-outcome>
+            <to-view-id>/employeebilling.xhtml</to-view-id>
+        </navigation-case>
+            
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>
+            /employeebilling.xhtml
+        </from-view-id>
+        <navigation-case>
+            <from-outcome>back</from-outcome>
+            <to-view-id>/employeeflow.xhtml</to-view-id>
+        </navigation-case>
             
     </navigation-rule>
     
