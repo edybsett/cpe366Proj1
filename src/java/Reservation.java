@@ -42,13 +42,7 @@ public class Reservation implements Serializable {
     private float totalCost;
     private String custFirst;
     private String custLast;
-    private float basecost; //FYI this should be set ahead of time,
-    private Date UIstart;
-    private Date UIend;
-    
-                            //Like when the reservation is created the cost should be set
-                            //Do not use the special rates table/reservation transformation table
-                            //to set this variable!
+    private float basecost; 
     private boolean checkedIn;
     private int resIdForBill;
     private String bed;
@@ -81,35 +75,27 @@ public class Reservation implements Serializable {
     }
 
     public Date getStartdate() {
-        return startdate;
+        if (startdate != null)
+            return startdate;
+        else
+            return new Date(System.currentTimeMillis());
     }
 
     public void setStartdate(Date startdate) {
-        this.startdate = DateUtil.addDays(startdate, 1);
+        this.startdate = startdate;
+        //this.startdate = DateUtil.addDays(startdate, 1);
     }
 
     public Date getEnddate() {
-        return enddate;
+        if (enddate != null)
+            return enddate;
+        else
+            return DateUtil.addDays(new Date(System.currentTimeMillis()), 1);
     }
 
     public void setEnddate(Date enddate) {
-        this.enddate = DateUtil.addDays(enddate, 1);
-    }
-    
-    public Date getUIend() {
-        return UIend;
-    }
-
-    public void setUIend(Date enddate) {
-        this.UIend = enddate;
-    }
-    
-    public Date getUIstart() {
-        return UIstart;
-    }
-
-    public void setUIstart(Date startdate) {
-        this.UIstart = startdate;
+        this.enddate = enddate;
+        //this.enddate = DateUtil.addDays(enddate, 1);
     }
 
     public float getBasecost() {
@@ -362,14 +348,11 @@ public class Reservation implements Serializable {
         preparedStatement.setInt(4, custid);
         preparedStatement.executeUpdate();
         con.commit();
-        
-  
         con.close();
-        
     }
     
-    public String makeReservation() throws SQLException {
-        
+    public void setAvailableRoom() throws SQLException {
+        PreparedStatement ps;
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
@@ -377,21 +360,102 @@ public class Reservation implements Serializable {
         }
         con.setAutoCommit(false);
         
+        /* GET a the first room available with the specified types */
+        String query = "SELECT rmNum, view, bed, price FROM Room\n";
+        query       += "WHERE rmNum NOT IN ";
+        query       += "(SELECT roomid AS rmnum ";
+        query       += "FROM Reservation WHERE ";
+        query       += "((? <= enddate AND ? >= startDate) OR ";
+        query       += "(? >= startdate AND ? <= enddate) OR ";
+        query       += "(startdate >= ? AND startdate <= ?))";
+        query       += "AND view=? AND bed=?) ";
+        query       += "ORDER BY rmNum";
+        ps = con.prepareStatement(query);
+        ps.setDate(1, new java.sql.Date(startdate.getTime()));
+        ps.setDate(2, new java.sql.Date(startdate.getTime()));
+        ps.setDate(3, new java.sql.Date(enddate.getTime()));
+        ps.setDate(4, new java.sql.Date(enddate.getTime()));
+        ps.setDate(5, new java.sql.Date(startdate.getTime()));                
+        ps.setDate(6, new java.sql.Date(startdate.getTime()));
+        ps.setString(7, view);
+        ps.setString(8, bed);
+        ResultSet rs = ps.executeQuery();
         
+        if (rs.next()) {
+            roomid = rs.getInt("rmNum");
+        }
+        con.commit();
+        con.close();
+    }
+    
+    public void setCost() throws SQLException {
+        String query;
+        PreparedStatement ps;
+        basecost = 0;
+        Connection con = dbConnect.getConnection();
 
-        Statement statement = con.createStatement();
-        PreparedStatement preparedStatement = con.prepareStatement("Insert into Reservation(roomid, custid, startdate, enddate, basecost, fees) values(?,?,?,?,?,?)");
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+        
+        /* NOW get the price of the room including special rates for each day*/
+        Date endp1 = DateUtil.addDays(enddate, 1);
+        for(Date curdate = startdate; !curdate.equals(endp1); curdate = DateUtil.addDays(curdate, 1)) {
+            /* SEARCH for a SpecialPrice first */
+            query = "SELECT price FROM SpecialRates ";
+            query += "WHERE rmNum = ? AND date = ?";
+            ps = con.prepareStatement(query);
+            ps.setInt(1, roomid);
+            ps.setDate(2, new java.sql.Date(curdate.getTime()));
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                basecost += rs.getFloat("price");
+                continue;
+            }
+            /* Now CHECK for a HotelWideRate */
+            query = "SELECT price FROM HotelWideRates ";
+            query += "WHERE date = ?";
+            ps = con.prepareStatement(query);
+            ps.setDate(1, new java.sql.Date(curdate.getTime()));
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                basecost += rs.getFloat("price");
+                continue;
+            }
+            /* Now we get the base price if there are no special ones */
+            query = "SELECT price FROM Room ";
+            query += "WHERE rmNum = ?";
+            ps = con.prepareStatement(query);
+            ps.setInt(1, roomid);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                basecost += rs.getFloat("price");
+            }
+            else {
+                throw new SQLException("Unknown error!");
+            }
+        }
+        con.commit();
+        con.close();
+                
+    }
+    
+    public String makeReservation() throws SQLException {
+        Connection con = dbConnect.getConnection();
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+        
+        PreparedStatement preparedStatement = con.prepareStatement("Insert into Reservation(roomid, custid, startdate, enddate, basecost) values(?,?,?,?,?)");
         preparedStatement.setInt(1, roomid);
         preparedStatement.setInt(2, custid);
         preparedStatement.setDate(3, new java.sql.Date(startdate.getTime()));
         preparedStatement.setDate(4, new java.sql.Date(enddate.getTime()));
-        preparedStatement.setFloat(5, 100);
-        preparedStatement.setFloat(6, 0);
+        preparedStatement.setFloat(5, basecost);
         preparedStatement.executeUpdate();
-        statement.close();
         con.commit();
-        
-  
         con.close();
         Util.invalidateUserSession();
         return "made";
@@ -472,29 +536,33 @@ public class Reservation implements Serializable {
             throw new SQLException("Can't get database connection");
         }
         
-        PreparedStatement ps = con.prepareStatement("select rmNum, view, price, bed from  Room WHERE rmnum NOT IN  (select roomid AS rmnum FROM Reservation WHERE ((? <= enddate AND ? >= startDate) OR (? >= startdate AND ? <= enddate) OR (startdate >= ? AND startdate <= ?))) ORDER BY rmnum");
+        String query = "SELECT DISTINCT view, bed, price FROM Room\n";
+        query       += "WHERE rmNum NOT IN ";
+        query       += "(SELECT roomid AS rmnum ";
+        query       += "FROM Reservation WHERE ";
+        query       += "((? <= enddate AND ? >= startDate) OR ";
+        query       += "(? >= startdate AND ? <= enddate) OR ";
+        query       += "(startdate >= ? AND startdate <= ?))) ";
+        query       += "ORDER BY view,bed,price";
+        PreparedStatement ps = con.prepareStatement(query);
         
-        if (UIstart == null)
-        {
-            UIstart = new Date(System.currentTimeMillis());
-            UIend = new Date(System.currentTimeMillis());
-        }
-        ps.setDate(1, new java.sql.Date(DateUtil.addDays(UIstart, 1).getTime()));
-        ps.setDate(2, new java.sql.Date(DateUtil.addDays(UIstart, 1).getTime()));
-        ps.setDate(3, new java.sql.Date(DateUtil.addDays(UIend, 1).getTime()));
-        ps.setDate(4, new java.sql.Date(DateUtil.addDays(UIend, 1).getTime()));
-        ps.setDate(5, new java.sql.Date(DateUtil.addDays(UIstart, 1).getTime()));                
-        ps.setDate(6, new java.sql.Date(DateUtil.addDays(UIend, 1).getTime()));
+        // See getters for why I did this
+        startdate = getStartdate();
+        enddate   = getEnddate();
+        
+        ps.setDate(1, new java.sql.Date(startdate.getTime()));
+        ps.setDate(2, new java.sql.Date(startdate.getTime()));
+        ps.setDate(3, new java.sql.Date(enddate.getTime()));
+        ps.setDate(4, new java.sql.Date(enddate.getTime()));
+        ps.setDate(5, new java.sql.Date(startdate.getTime()));                
+        ps.setDate(6, new java.sql.Date(startdate.getTime()));
         ResultSet result = ps.executeQuery();
         
         List<Rooms> list = new ArrayList<Rooms>();
 
         while (result.next()) {
             Rooms room = new Rooms();
-            room.setRmNum(result.getInt("rmNum"));
-            room.setView(result.getString("view"));
-            //rate.setEndDate(result.getDate("endDate"));
-            
+            room.setView(result.getString("view"));            
             room.setBasePrice(result.getFloat("price"));
             room.setBed(result.getString("bed"));
             list.add(room);

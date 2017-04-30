@@ -14,7 +14,7 @@
             
                        <h:form>
                 <h:panelGrid>
-                    Start Date: <h:inputText value="#{reservation.UIstart}" required ="true"   
+                    Start Date: <h:inputText value="#{reservation.startdate}" required ="true"   
                     requiredMessage="Your must enter start date"
                     converterMessage="YYYY/MM/DD"
                                          id="startDate">
@@ -22,7 +22,7 @@
                 </h:inputText>
                 <h:message for="startDate" style="color:red;margin:8px;"/>
 
-                End Date: <h:inputText value="#{reservation.UIend}" required ="true"
+                End Date: <h:inputText value="#{reservation.enddate}" required ="true"
                                        requiredMessage="Your must enter end date"
                                        converterMessage="YYYY/MM/DD"
                                        id="endDate">
@@ -33,9 +33,18 @@
                 <h:commandButton value="Search Available Rooms" action="#{reservation.findAvailable}"/>
             </h:panelGrid>
             </h:form>
-            
-            <h5>List of Available Reservations</h5>
-            
+            <br/>
+            <h:outputText value="List of Available Reservations for "></h:outputText>
+            <h:outputText value="#{reservation.startdate}">
+                <f:convertDateTime pattern="YYYY/MM/dd" type="date"/>
+            </h:outputText>
+            <h:outputText value=" - "/>
+            <h:outputText value="#{reservation.enddate}">
+                <f:convertDateTime pattern="YYYY/MM/dd" type="date"/>
+            </h:outputText>
+            <br/>
+            <br/>
+      
             <h:dataTable value="#{reservation.getAvailableRooms()}" var="r" border="1">
 
             <h:column>
@@ -60,12 +69,12 @@
              <h2>Create a Reservation</h2>
                  <h:panelGrid>
                      Desired View: <h:selectOneRadio value="#{reservation.view}">
-                         <f:selectItem itemValue="Ocean" />
-                         <f:selectItem itemValue="Pool"/>
+                         <f:selectItem itemValue="ocean" itemLabel="Ocean"/>
+                         <f:selectItem itemValue="pool" itemLabel="Pool"/>
                      </h:selectOneRadio>
                      Desired Bed: <h:selectOneRadio value="#{reservation.bed}">
-                         <f:selectItem itemValue="Single king"/>
-                         <f:selectItem itemValue="Double queen"/>
+                         <f:selectItem itemValue="single king" itemLabel="Single king"/>
+                         <f:selectItem itemValue="double queen" itemLabel="Double queen"/>
                      </h:selectOneRadio>
                     Start Date: <h:inputText value="#{reservation.startdate}" required ="true"   
                     requiredMessage="Your must enter start date"
@@ -87,6 +96,8 @@
                 <h:commandButton value="Make Reservation" 
                                  action="#{reservation.rescheckout}">
                     <f:actionListener binding="#{reservation.setCustid(login.lid)}"/>
+                    <f:actionListener binding="#{reservation.setAvailableRoom()}"/>
+                    <f:actionListener binding="#{reservation.setCost()}"/>
                 </h:commandButton>
             </h:panelGrid>
             </h:form>

@@ -16,8 +16,21 @@
                 <h3>Reservation Summary</h3>
                 <h:outputText value="Room number: #{reservation.roomid}"/>
                 <br/>
-                <h:outputText value="Dates: #{reservation.startdate} - #{reservation.enddate}">
+                <h:outputText value="Dates: "> 
                 </h:outputText>
+                <h:outputText value="#{reservation.startdate}">
+                     <f:convertDateTime pattern="yyyy/MM/dd"/>
+                </h:outputText>
+                <h:outputText value=" - "/>
+                <h:outputText value="#{reservation.enddate}">
+                    <f:convertDateTime pattern="yyyy/MM/dd"/>
+                </h:outputText>
+                <br/>
+                <h:outputText value="View: #{reservation.view}"/>
+                <br/>
+                <h:outputText value="Bed: #{reservation.bed}"/>
+                <br/>
+                <h:outputText value="Total price: #{reservation.basecost}"/>
                 
     
             <h:panelGrid>
