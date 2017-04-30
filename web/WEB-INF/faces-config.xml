@@ -251,6 +251,22 @@
     </navigation-rule>
     
     <navigation-rule>
+        <from-view-id>/reservationCheckout.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>made</from-outcome>
+            <to-view-id>/resSuccess.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>/resSuccess.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>back</from-outcome>
+            <to-view-id>/customerflow.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
         <from-view-id>
             /findCustomer.xhtml
         </from-view-id>

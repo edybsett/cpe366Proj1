@@ -49,6 +49,22 @@ public class Reservation implements Serializable {
     private String view;
     
     private UIInput residUI = new UIInput();
+    private List<SpecialRates> sRates = new ArrayList<SpecialRates>();
+   
+   
+    /**
+     * @return the sRates
+     */
+    public List<SpecialRates> getsRates() {
+        return sRates;
+    }
+
+    /**
+     * @param sRates the sRates to set
+     */
+    public void setsRates(List<SpecialRates> sRates) {
+        this.sRates = sRates;
+    }
 
     public int getResid() {
         return resid;
@@ -376,7 +392,7 @@ public class Reservation implements Serializable {
         ps.setDate(3, new java.sql.Date(enddate.getTime()));
         ps.setDate(4, new java.sql.Date(enddate.getTime()));
         ps.setDate(5, new java.sql.Date(startdate.getTime()));                
-        ps.setDate(6, new java.sql.Date(startdate.getTime()));
+        ps.setDate(6, new java.sql.Date(enddate.getTime()));
         ps.setString(7, view);
         ps.setString(8, bed);
         ResultSet rs = ps.executeQuery();
@@ -410,7 +426,12 @@ public class Reservation implements Serializable {
             ps.setDate(2, new java.sql.Date(curdate.getTime()));
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                basecost += rs.getFloat("price");
+                float cost = rs.getFloat("price");
+                basecost += cost;
+                SpecialRates sr = new SpecialRates();
+                sr.setDate(curdate);
+                sr.setPrice(cost);
+                sRates.add(sr);
                 continue;
             }
             /* Now CHECK for a HotelWideRate */
@@ -420,7 +441,12 @@ public class Reservation implements Serializable {
             ps.setDate(1, new java.sql.Date(curdate.getTime()));
             rs = ps.executeQuery();
             if (rs.next()) {
-                basecost += rs.getFloat("price");
+                float cost = rs.getFloat("price");
+                basecost += cost;
+                SpecialRates sr = new SpecialRates();
+                sr.setDate(curdate);
+                sr.setPrice(cost);
+                sRates.add(sr);
                 continue;
             }
             /* Now we get the base price if there are no special ones */
@@ -457,7 +483,6 @@ public class Reservation implements Serializable {
         preparedStatement.executeUpdate();
         con.commit();
         con.close();
-        Util.invalidateUserSession();
         return "made";
     }
     

@@ -49,7 +49,6 @@ public class SpecialRates implements Serializable {
    private UIInput deleteUI;
    
    
-   
     public UIInput getrmNumUI() {
         return rmNumUI;
     }

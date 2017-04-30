@@ -13,6 +13,7 @@
         <ui:define name="body">
         
         <h:form>
+            <h3> Success! </h3>
                 <h3>Reservation Summary</h3>
                 <h:outputText value="Room number: #{reservation.roomid}"/>
                 <br/>
@@ -50,9 +51,8 @@
 
         </h:dataTable>
                 
-    
             <h:panelGrid>
-                <h:commandButton value="Checkout" action="#{reservation.makeReservation()}"
+                <h:commandButton value="Go back" action="back"
                                  styleClass="button"/>
             </h:panelGrid>
         </h:form>
