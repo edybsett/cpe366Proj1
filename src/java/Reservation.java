@@ -188,6 +188,7 @@ public class Reservation implements Serializable {
         ps.close();
         //con.commit();
         con.close();
+        addBillDB();
         return "bill";
     }
     
@@ -227,22 +228,25 @@ public class Reservation implements Serializable {
 
         PreparedStatement ps
                 = con.prepareStatement(
-                        "select r.resid, r.checkedIn, c.lastname, c.firstname, \n" +
-                        "  r.startdate, r.enddate, r.roomId, r.basecost, \n" +
+                        "select r.resid, r.checkedIn, c.lastname, r.custid, c.firstname, \n" +
+                        "  r.startdate, r.enddate, r.roomId, r.basecost, b.ccnum,\n" +
                         "  CASE WHEN f.sum = NULL \n" +
                         "    THEN 0 \n" +
                         "  ELSE f.sum \n" +
                         "  END as fees \n" +
-                        "from reservation r, customer c, \n" +
+                        "from reservation r, customer c, banking b,\n" +
                         "    (SELECT sum(price), Reservation.resId FROM Reservation, Fees, ResXFee\n" +
                         "      where Reservation.resId = ResXFee.resId AND\n" +
                         "      feeId = Fees.id group by Reservation.resId) f\n" +
-                        "where r.custid = c.cid and r.resid = f.resid and r.resid = " + resIdForBill);
+                        "where r.custid = c.cid and r.resid = f.resid and b.cid = r.custid and r.resid = " + resIdForBill);
 
         //get customer data from database
         ResultSet result = ps.executeQuery();
         List<Reservation> list = new ArrayList<Reservation>();
-
+        String creditcard = "";
+        float totalcost = 0;
+        int custId = 0;
+        
         while (result.next()) {
             Reservation rate = new Reservation();
             rate.setResid(result.getInt("resid"));
@@ -255,12 +259,79 @@ public class Reservation implements Serializable {
             rate.setRoomid(result.getInt("roomId"));
             
             rate.setTotalCost(result.getFloat("basecost") + result.getFloat("fees"));
+            creditcard = result.getString("ccnum");
+            totalcost = result.getFloat("basecost") + result.getFloat("fees");
+            custId = result.getInt("custid");
             list.add(rate);
+            
         }
+        
         result.close();
         con.close();
         return list;
     
+    }
+    
+    public void addBillDB() throws SQLException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+
+        PreparedStatement ps
+                = con.prepareStatement(
+                        "select r.resid, r.checkedIn, c.lastname, r.custid, c.firstname, \n" +
+                        "  r.startdate, r.enddate, r.roomId, r.basecost, b.ccnum,\n" +
+                        "  CASE WHEN f.sum = NULL \n" +
+                        "    THEN 0 \n" +
+                        "  ELSE f.sum \n" +
+                        "  END as fees \n" +
+                        "from reservation r, customer c, banking b,\n" +
+                        "    (SELECT sum(price), Reservation.resId FROM Reservation, Fees, ResXFee\n" +
+                        "      where Reservation.resId = ResXFee.resId AND\n" +
+                        "      feeId = Fees.id group by Reservation.resId) f\n" +
+                        "where r.custid = c.cid and r.resid = f.resid and b.cid = r.custid and r.resid = " + resIdForBill);
+
+        //get customer data from database
+        ResultSet result = ps.executeQuery();
+        String creditcard = "";
+        float totalcost = 0;
+        int custId = 0;
+        
+        while (result.next()) {
+            
+            creditcard = result.getString("ccnum");
+            totalcost = result.getFloat("basecost") + result.getFloat("fees");
+            custId = result.getInt("custid");
+            
+        }
+        
+        result.close();
+        con.close();
+        addBillToDB(creditcard, totalcost, custId);
+    
+    }
+    
+    public void addBillToDB(String creditcard, float cost, int custid) throws SQLException {
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+        
+        PreparedStatement preparedStatement = con.prepareStatement("Insert into Bill values(?,?,?,?)");
+        preparedStatement.setString(1, creditcard);
+        preparedStatement.setDate(2, java.sql.Date.valueOf(java.time.LocalDate.now()));
+        preparedStatement.setFloat(3, cost);
+        preparedStatement.setInt(4, custid);
+        preparedStatement.executeUpdate();
+        con.commit();
+        
+  
+        con.close();
+        
     }
     
     public String makeReservation() throws SQLException {
