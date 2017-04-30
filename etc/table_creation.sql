@@ -2,7 +2,9 @@
 /* When needing to clear everything here is the command sequence
    to run for a local machine: */
 /*
-DROP TABLE ResXFees;
+DROP TABLE Bill;
+DROP TABLE Employee;
+DROP TABLE ResXFee;
 DROP TABLE Reservation;
 DROP TABLE Fees;
 DROP TABLE SpecialRates;
@@ -10,8 +12,7 @@ DROP TABLE HotelWideRates;
 DROP TABLE Room;
 DROP TABLE Banking;
 DROP TABLE Customer;
-DROP TABLE Login;
-*/
+DROP TABLE Login; */
 
 CREATE TABLE Login(
 	id       SERIAL PRIMARY KEY,
@@ -30,7 +31,7 @@ CREATE TABLE Customer(
 
 CREATE TABLE Banking(
 	cid     INT    REFERENCES Customer(cid),
-	ccNum   TEXT   NOT NULL,
+	ccNum   TEXT   NOT NULL UNIQUE,
 	cvc     DECIMAL(3,0) NOT NULL,
 	expDate DATE   NOT NULL,
 	type    TEXT   NOT NULL -- visa, mastercard
@@ -76,6 +77,18 @@ CREATE TABLE ResXFee (
     feeId INT REFERENCES Fees(id)
 );
 
+CREATE TABLE Bill (
+    ccNum  TEXT REFERENCES Banking(ccNum),
+    date   DATE NOT NULL,
+    cost   DECIMAL(6,2) NOT NULL,
+    custId INT REFERENCES Customer(cid)
+);
+
+CREATE TABLE Employee(
+    eid INT REFERENCES Login(id),
+    firstName TEXT NOT NULL,
+    lastName TEXT NOT NULL
+);
 -- Test data
 -- Rooms
 INSERT INTO Room(rmNum, view, bed, price)
@@ -155,7 +168,7 @@ INSERT INTO Banking(cid, ccNum, cvc, expDate, type)
 VALUES (2, '1234-5678-1234', 234, '04-11-2017', 'visa');
 
 -- Standard fee entries
-INSERT INTO Fees
+INSERT INTO Fees(name, price)
 VALUES ('breakfast', 10.00), 
     ('wifi', 20.00), 
     ('cleaning', 25.00),

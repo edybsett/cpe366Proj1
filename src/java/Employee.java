@@ -26,10 +26,11 @@ import javax.inject.Named;
 @SessionScoped
 @ManagedBean
 public class Employee {
-    
     private int id;
     private String name;
     private String password;
+    private String firstName;
+    private String lastName;
     
     public Employee(){}
     
@@ -38,6 +39,36 @@ public class Employee {
         this.name = name;
         this.password = password;
     }
+    
+    
+    /**
+     * @return the firstName
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * @param firstName the firstName to set
+     */
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    /**
+     * @return the lastName
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * @param lastName the lastName to set
+     */
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    
 
     /**
      * @return the id
@@ -109,8 +140,9 @@ public class Employee {
             throw new SQLException("could not connect to DB");
         }
         
-        
-        String q = "select id,username,password from Login where title='employee';";
+        String q = "SELECT id, firstName, lastName, username, password ";
+        q       += "FROM Login, Employee WHERE title='employee' ";
+        q       += "AND id = eid ORDER BY id";
         PreparedStatement ps = con.prepareStatement(q);
         ResultSet result = ps.executeQuery();
         List<Employee> ret = new ArrayList<Employee>();
@@ -118,6 +150,8 @@ public class Employee {
             Employee emp = new Employee(result.getInt("id"), 
                     result.getString("username"),
             result.getString("password"));
+            emp.setFirstName(result.getString("firstName"));
+            emp.setLastName(result.getString("lastName"));
             ret.add(emp);
         }
         return ret;

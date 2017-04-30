@@ -207,20 +207,44 @@ public class Form {
     
     public String createEmployee() throws SQLException, ParseException {
        Connection con = dbConnect.getConnection();
+       PreparedStatement ps;
+       String query;
 
         if (con == null) {
             throw new SQLException("Can't get database connection");
         }
         con.setAutoCommit(false);
 
-        Statement statement = con.createStatement();
-
-        PreparedStatement preparedStatement = con.prepareStatement("Insert into Login(username, password, title) values(?,?,?)");
-        preparedStatement.setString(1, getUsername());
-        preparedStatement.setString(2, getPassword());
-        preparedStatement.setString(3, "employee");
-        preparedStatement.executeUpdate();
-        statement.close();
+        /* INSERT the new employee into the DB */
+        query = "INSERT INTO Login(username, password, title) ";
+        query += "VALUES(?,?,?)";
+        ps = con.prepareStatement(query);
+        ps.setString(1, getUsername());
+        ps.setString(2, getPassword());
+        ps.setString(3, "employee");
+        ps.executeUpdate();
+        
+        /* GET the id from the DB */
+        query = "SELECT id from Login where username=? and password=?";
+        ps = con.prepareStatement(query);
+        ps.setString(1, getUsername());
+        ps.setString(2, getPassword());
+        ResultSet rs = ps.executeQuery();
+        if (rs.next())
+            this.id = rs.getInt("id");
+        else
+            throw new SQLException("Error adding employee");
+        
+        /* ADD the employee to the Employee table */
+        query = "INSERT INTO Employee ";
+        query += "VALUES(?, ?, ?)";
+        ps = con.prepareStatement(query);
+        ps.setInt(1, this.id);
+        ps.setString(2, this.firstName);
+        ps.setString(3, this.lastName);
+        ps.executeUpdate();
+        
+        /* CLOSE up */
         con.commit();
         con.close();
         //Util.invalidateUserSession();

@@ -21,9 +21,17 @@ and open the template in the editor.
             <h:form>
             <h:dataTable value="#{employee.getEmps()}" var="emps" border="1">
                     <h:column>
-                        <f:facet name="header">Employee ID</f:facet>
-                            #{emps.id}
-                    </h:column>
+                    <f:facet name="header">Employee ID</f:facet>
+                        #{emps.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">First Name</f:facet>
+                    #{emps.firstName}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Last Name</f:facet>
+                    #{emps.lastName}
+                </h:column>
 
                     <h:column>
                         <f:facet name="header">Username</f:facet>

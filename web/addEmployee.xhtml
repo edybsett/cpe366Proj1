@@ -20,12 +20,26 @@ and open the template in the editor.
             
         <ui:define name="body">
             <h:form>
-                Login: <h:inputText value="#{form.username}" required ="true"
+                <h:outputText value="First Name: "/>
+                <h:inputText value="#{form.firstName}"
+                                         required="true"
+                                         requiredMessage="Please enter a first name"
+                                         id="nameId"/>
+                <br/>
+                <h:outputText value="Last Name: "/>
+                <h:inputText value="#{form.lastName}"
+                                        required="true"
+                                        requiredMessage="Please enter a last name"
+                                        id="lastId"/>
+                <br/>
+                <h:outputText value="Login:    "/>
+                <h:inputText value="#{form.username}" required ="true"
                     requiredMessage="Your must enter login"
                     id="loginId"/>
+                <br/>
                 <h:message for="loginId" style="color:red;margin:8px;"/>
-                
-                Password: <h:inputSecret value="#{form.password}" required ="true"
+                <h:outputText value="Password:  "/>
+                <h:inputSecret value="#{form.password}" required ="true"
                     requiredMessage="Your must enter password"
                     id="passId"/>
                 <h:message for="passId" style="color:red;margin:8px;"/>
