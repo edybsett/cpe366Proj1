@@ -50,7 +50,17 @@ public class Customer implements Serializable {
     private int custid;
     private Date startdate;
     private Date enddate;
+    
+    private boolean checked;
 
+    
+    public boolean getChecked(){
+        return checked;
+    }
+    
+    public void setChecked(boolean cancel) {
+        this.checked = cancel;
+    }
 
     public String getView() {
         return view;
@@ -244,7 +254,7 @@ public class Customer implements Serializable {
         List<Customer> list = new ArrayList<Customer>();
         PreparedStatement ps
                 = con.prepareStatement(
-                        "select resid, roomid, startdate, enddate from reservation where " + "custId = " + login.getLid() + ";");        
+                        "select resid, roomid, startdate, enddate, checkedin from reservation where " + "custId = " + login.getLid() + ";");        
         
 
         //get customer data from database
@@ -258,6 +268,7 @@ public class Customer implements Serializable {
             cust.setRoomid(result.getInt("roomid"));
             cust.setStartdate(result.getDate("startdate"));
             cust.setEnddate(result.getDate("enddate"));
+            cust.setChecked(result.getBoolean("checkedin"));
             PreparedStatement ps2 = con.prepareStatement("select bed, view from room where rmnum = " + cust.getRoomid() + ";");
             ResultSet result2 = ps2.executeQuery();
             while(result2.next()){
@@ -308,6 +319,20 @@ public class Customer implements Serializable {
         return list;
     }
 
+    
+    public void cancelReservation() throws SQLException{
+        Connection con = dbConnect.getConnection();
+
+        if (con == null) {
+            throw new SQLException("Can't get database connection");
+        }
+        con.setAutoCommit(false);
+
+        PreparedStatement ps = con.prepareStatement( "DELETE FROM reservation where resid = " + resid + " AND custid = " + login.getLid() + " AND checkedin = false;");
+        ps.executeUpdate();
+        con.commit();
+        con.close();
+    }
     public void customerIDExists(FacesContext context, UIComponent componentToValidate, Object value)
             throws ValidatorException, SQLException {
 
