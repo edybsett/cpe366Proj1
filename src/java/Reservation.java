@@ -471,8 +471,12 @@ public class Reservation implements Serializable {
         PreparedStatement preparedStatement = con.prepareStatement("Insert into Reservation(roomid, custid, startdate, enddate, basecost) values(?,?,?,?,?)");
         preparedStatement.setInt(1, roomid);
         preparedStatement.setInt(2, custid);
-        preparedStatement.setDate(3, new java.sql.Date(startdate.getTime()));
-        preparedStatement.setDate(4, new java.sql.Date(enddate.getTime()));
+        // For some reason, startdate and enddate go in one day behind.
+        // Just gonna add one day and hope that fixes it.
+        Date nstart = DateUtil.addDays(startdate, 1);
+        Date nend   = DateUtil.addDays(enddate, 1);
+        preparedStatement.setDate(3, new java.sql.Date(nstart.getTime()));
+        preparedStatement.setDate(4, new java.sql.Date(nend.getTime()));
         preparedStatement.setFloat(5, basecost);
         preparedStatement.executeUpdate();
         con.commit();
