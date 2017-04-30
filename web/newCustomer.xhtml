@@ -48,11 +48,11 @@
                     id="usercrc"/>
                 <h:message for="usercrc" style="color:red;margin:8px;"/>
                 
-                Credit Card Expiration: <h:inputText value="#{form.expiration}" required ="true"   
+                Credit Card Expiration: MM/YY <h:inputText value="#{form.expiration}" required ="true"   
                     requiredMessage="Your must enter start date"
                     converterMessage="illeagal blah"
                                          id="startDate">
-                <f:convertDateTime pattern="yyyy/MM/dd"/>
+                <f:convertDateTime pattern="MM/yy"/>
                  </h:inputText>
                   <h:message for="userstartDate" style="color:red;margin:8px;"/>
                   
