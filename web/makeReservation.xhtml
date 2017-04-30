@@ -11,13 +11,32 @@
             <ui:define name="header">Reservations</ui:define>
             
         <ui:define name="body">
-            <h5>List of reservations</h5>
+            
+                       <h:form>
+                <h:panelGrid>
+                    Start Date: <h:inputText value="#{reservation.UIstart}" required ="true"   
+                    requiredMessage="Your must enter start date"
+                    converterMessage="YYYY/MM/DD"
+                                         id="startDate">
+                <f:convertDateTime pattern="yyyy/MM/dd"/>
+                </h:inputText>
+                <h:message for="startDate" style="color:red;margin:8px;"/>
+
+                End Date: <h:inputText value="#{reservation.UIend}" required ="true"
+                                       requiredMessage="Your must enter end date"
+                                       converterMessage="YYYY/MM/DD"
+                                       id="endDate">
+                <f:convertDateTime pattern="yyyy/MM/dd"/>
+                </h:inputText>
+                </h:panelGrid>
+            <h:panelGrid>
+                <h:commandButton value="Search Available Rooms" action="#{reservation.findAvailable}"/>
+            </h:panelGrid>
+            </h:form>
+            
+            <h5>List of Available Reservations</h5>
             
             <h:dataTable value="#{reservation.getAvailableRooms()}" var="r" border="1">
-            <h:column>
-                <f:facet name="header"> Room Number </f:facet>
-                    #{r.rmNum}
-            </h:column>
 
             <h:column>
                 <f:facet name="header"> View </f:facet>
@@ -35,38 +54,22 @@
             </h:column> 
             </h:dataTable>
 
-            <h:form>
-                <h:panelGrid>
-                    Start Date: <h:inputText value="#{reservation.UIstart}" required ="true"   
-                    requiredMessage="Your must enter start date"
-                    converterMessage="illeagal blah"
-                                         id="startDate">
-                <f:convertDateTime pattern="yyyy/MM/dd"/>
-                </h:inputText>
-                <h:message for="startDate" style="color:red;margin:8px;"/>
-
-                End Date: <h:inputText value="#{reservation.UIend}" required ="true"
-                                       requiredMessage="Your must enter end date"
-                                       converterMessage="illeagal blah"
-                                       id="endDate">
-                <f:convertDateTime pattern="yyyy/MM/dd"/>
-                </h:inputText>
-                </h:panelGrid>
-            <h:panelGrid>
-                <h:commandButton value="Search" action="#{reservation.findAvailable}"/>
-            </h:panelGrid>
-            </h:form>
+ 
                             
          <h:form>
+             <h2>Create a Reservation</h2>
                  <h:panelGrid>
-                    Room Number: <h:inputText value="#{reservation.roomid}" required ="true"   
-                    requiredMessage="Your must enter a room number"
-                    converterMessage="illeagal blah"
-                                         id="roomid">
-                </h:inputText>
+                     Desired View: <h:selectOneRadio value="#{reservation.view}">
+                         <f:selectItem itemValue="Ocean" />
+                         <f:selectItem itemValue="Pool"/>
+                     </h:selectOneRadio>
+                     Desired Bed: <h:selectOneRadio value="#{reservation.bed}">
+                         <f:selectItem itemValue="Single king"/>
+                         <f:selectItem itemValue="Double queen"/>
+                     </h:selectOneRadio>
                     Start Date: <h:inputText value="#{reservation.startdate}" required ="true"   
                     requiredMessage="Your must enter start date"
-                    converterMessage="illeagal blah"
+                    converterMessage="YYYY/MM/DD"
                                          id="start">
                 <f:convertDateTime pattern="yyyy/MM/dd"/>
                 </h:inputText>
@@ -74,14 +77,17 @@
 
                 End Date: <h:inputText value="#{reservation.enddate}" required ="true"
                                        requiredMessage="Your must enter end date"
-                                       converterMessage="illeagal blah"
+                                       converterMessage="YYYY/MM/DD"
                                        id="end">
                 <f:convertDateTime pattern="yyyy/MM/dd"/>
                 </h:inputText>
                 </h:panelGrid>
              
             <h:panelGrid>
-                <h:commandButton value="Make" action="#{reservation.makeReservation}"/>
+                <h:commandButton value="Make Reservation" 
+                                 action="#{reservation.rescheckout}">
+                    <f:actionListener binding="#{reservation.setCustid(login.lid)}"/>
+                </h:commandButton>
             </h:panelGrid>
             </h:form>
                     

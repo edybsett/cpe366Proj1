@@ -113,10 +113,10 @@ public class Login implements Serializable {
         this.email = email;
     }
     
-    public int getlid(){
+    public int getLid(){
         return lid;
     }
-    public void setlid(int lid){
+    public void setLid(int lid){
         this.lid = lid;
     }
     public String getLogin() {
@@ -170,7 +170,7 @@ public class Login implements Serializable {
             throw new ValidatorException(errorMessage);
         }
         String getTitle = result.getString("title");
-        setlid(result.getInt("id"));
+        lid = result.getInt("id");
         result.close();
         
         con.close();

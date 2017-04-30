@@ -32,7 +32,7 @@ import javax.faces.bean.ManagedProperty;
 @SessionScoped
 @ManagedBean
 public class Reservation implements Serializable {
-    
+   
     private DBConnect dbConnect = new DBConnect();
     private int resid;
     private int roomid;
@@ -51,6 +51,8 @@ public class Reservation implements Serializable {
                             //to set this variable!
     private boolean checkedIn;
     private int resIdForBill;
+    private String bed;
+    private String view;
     
     private UIInput residUI = new UIInput();
 
@@ -83,7 +85,7 @@ public class Reservation implements Serializable {
     }
 
     public void setStartdate(Date startdate) {
-        this.startdate = startdate;
+        this.startdate = DateUtil.addDays(startdate, 1);
     }
 
     public Date getEnddate() {
@@ -91,7 +93,7 @@ public class Reservation implements Serializable {
     }
 
     public void setEnddate(Date enddate) {
-        this.enddate = enddate;
+        this.enddate = DateUtil.addDays(enddate, 1);
     }
     
     public Date getUIend() {
@@ -158,6 +160,34 @@ public class Reservation implements Serializable {
         this.custLast = custLast;
     }
     
+        /**
+     * @return the bed
+     */
+    public String getBed() {
+        return bed;
+    }
+
+    /**
+     * @param bed the bed to set
+     */
+    public void setBed(String bed) {
+        this.bed = bed;
+    }
+
+    /**
+     * @return the view
+     */
+    public String getView() {
+        return view;
+    }
+
+    /**
+     * @param view the view to set
+     */
+    public void setView(String view) {
+        this.view = view;
+    }
+    
     public String checkIn() throws SQLException {
 
         Connection con = dbConnect.getConnection();
@@ -194,6 +224,10 @@ public class Reservation implements Serializable {
     
     public String goBack() {
         return "back";
+    }
+    
+    public String rescheckout() {
+        return "checkout";
     }
     
 

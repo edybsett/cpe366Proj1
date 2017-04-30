@@ -244,7 +244,7 @@ public class Customer implements Serializable {
         List<Customer> list = new ArrayList<Customer>();
         PreparedStatement ps
                 = con.prepareStatement(
-                        "select resid, roomid, startdate, enddate from reservation where " + "custId = " + login.getlid() + ";");        
+                        "select resid, roomid, startdate, enddate from reservation where " + "custId = " + login.getLid() + ";");        
         
 
         //get customer data from database
@@ -268,7 +268,7 @@ public class Customer implements Serializable {
             //store all data into a List
             list.add(cust);
         }
-        System.out.println("list " + list.size() + "cust id " + login.getlid());
+        System.out.println("list " + list.size() + "cust id " + login.getLid());
         result.close();
         con.close();
         return list;
