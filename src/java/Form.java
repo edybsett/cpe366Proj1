@@ -187,7 +187,7 @@ public class Form {
      * @param type the Credit card type to set
      */
     public void setCcnType (String type) {
-        this.password = type;
+        this.ccnType = type;
     }
     
     /**
@@ -293,7 +293,9 @@ public class Form {
         statement.close();
         
         Statement getids = con.createStatement();
-        PreparedStatement prepedId = con.prepareStatement("select id from Login");
+        PreparedStatement prepedId = con.prepareStatement("select id from Login where username = ? AND password = ?");
+        prepedId.setString(1, username);
+        prepedId.setString(2, password);
         ResultSet result = prepedId.executeQuery();
             if (!result.next()) {
                 return null;
@@ -308,7 +310,7 @@ public class Form {
         bankStatement.setString(2, ccn);
         bankStatement.setInt(3, crc);
         bankStatement.setDate(4, new java.sql.Date(expiration.getTime()));
-        bankStatement.setString(5, "Visa");
+        bankStatement.setString(5, ccnType);
         bankStatement.executeUpdate();
         con.commit();
         con.close();
