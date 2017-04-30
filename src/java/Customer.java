@@ -42,13 +42,33 @@ public class Customer implements Serializable {
     private String lastName;
     private String address;
     private String email;
-
     
+    private String view;
+    private String bed;
     private int resid;
     private int roomid;
     private int custid;
     private Date startdate;
     private Date enddate;
+
+
+    public String getView() {
+        return view;
+    }
+
+    public void setView(String view) {
+        this.view = view;
+    }
+
+    public String getBed() {
+        return bed;
+    }
+
+    public void setBed(String bed) {
+        this.bed = bed;
+    }
+
+
     
     public int getResid() {
         return resid;
@@ -238,7 +258,13 @@ public class Customer implements Serializable {
             cust.setRoomid(result.getInt("roomid"));
             cust.setStartdate(result.getDate("startdate"));
             cust.setEnddate(result.getDate("enddate"));
-   
+            PreparedStatement ps2 = con.prepareStatement("select bed, view from room where rmnum = " + cust.getRoomid() + ";");
+            ResultSet result2 = ps2.executeQuery();
+            while(result2.next()){
+                cust.setBed(result2.getString("bed"));
+                cust.setView(result2.getString("view"));
+            }
+            result2.close();
             //store all data into a List
             list.add(cust);
         }
