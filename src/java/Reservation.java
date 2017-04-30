@@ -463,22 +463,48 @@ public class Reservation implements Serializable {
     
     public String makeReservation() throws SQLException {
         Connection con = dbConnect.getConnection();
+        PreparedStatement ps;
+        String query;
         if (con == null) {
             throw new SQLException("Can't get database connection");
         }
         con.setAutoCommit(false);
-        
-        PreparedStatement preparedStatement = con.prepareStatement("Insert into Reservation(roomid, custid, startdate, enddate, basecost) values(?,?,?,?,?)");
-        preparedStatement.setInt(1, roomid);
-        preparedStatement.setInt(2, custid);
+        query = "INSERT INTO Reservation(roomid, custid, startdate, enddate, basecost) ";
+        query += "VALUES(?,?,?,?,?)";
+        ps = con.prepareStatement(query);
+        ps.setInt(1, roomid);
+        ps.setInt(2, custid);
         // For some reason, startdate and enddate go in one day behind.
         // Just gonna add one day and hope that fixes it.
         Date nstart = DateUtil.addDays(startdate, 1);
         Date nend   = DateUtil.addDays(enddate, 1);
-        preparedStatement.setDate(3, new java.sql.Date(nstart.getTime()));
-        preparedStatement.setDate(4, new java.sql.Date(nend.getTime()));
-        preparedStatement.setFloat(5, basecost);
-        preparedStatement.executeUpdate();
+        ps.setDate(3, new java.sql.Date(nstart.getTime()));
+        ps.setDate(4, new java.sql.Date(nend.getTime()));
+        ps.setFloat(5, basecost);
+        ps.executeUpdate();
+        
+        /* Now get the Reservation id */
+        query = "SELECT id from Reservation ";
+        query += "WHERE roomid=? AND custid=? ";
+        query += "AND startdate = ? AND enddate = ? ";
+        query += "AND basecost = ?";
+        ps = con.prepareStatement(query);
+        ps.setInt(1, roomid);
+        ps.setInt(2, custid);
+        ps.setDate(3, new java.sql.Date(nstart.getTime()));
+        ps.setDate(4, new java.sql.Date(nend.getTime()));
+        ps.setFloat(5, basecost);
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            int resid = rs.getInt("id");
+            /* Now insert a 0 fee */
+            query = "INSERT INTO ResXFee(resid, feeid) ";
+            query += "VALUES(?, 0)";
+            ps = con.prepareStatement(query);
+            ps.setInt(1, resid);
+            ps.executeUpdate();
+        }
         con.commit();
         con.close();
         return "made";
