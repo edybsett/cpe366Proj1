@@ -77,8 +77,6 @@ public class Customer implements Serializable {
     public void setBed(String bed) {
         this.bed = bed;
     }
-
-
     
     public int getResid() {
         return resid;
@@ -320,18 +318,20 @@ public class Customer implements Serializable {
     }
 
     
-    public void cancelReservation() throws SQLException{
+    public String cancelReservation() throws SQLException{
         Connection con = dbConnect.getConnection();
 
         if (con == null) {
             throw new SQLException("Can't get database connection");
         }
         con.setAutoCommit(false);
-
+        PreparedStatement ps1 = con.prepareStatement("delete from resxfee rf where (select r.resid from resxfee rf, reservation r where r.custid = " + login.getLid() + "  AND r.resid = rf.resid AND r.resid = " + resid + " LIMIT 1) = rf.resid ;");
+        ps1.executeUpdate();
         PreparedStatement ps = con.prepareStatement( "DELETE FROM reservation where resid = " + resid + " AND custid = " + login.getLid() + " AND checkedin = false;");
         ps.executeUpdate();
         con.commit();
         con.close();
+        return "refresh";
     }
     public void customerIDExists(FacesContext context, UIComponent componentToValidate, Object value)
             throws ValidatorException, SQLException {
