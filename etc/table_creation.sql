@@ -31,7 +31,7 @@ CREATE TABLE Customer(
 
 CREATE TABLE Banking(
 	cid     INT    REFERENCES Customer(cid),
-	ccNum   TEXT   NOT NULL UNIQUE,
+	ccNum   TEXT   NOT NULL,
 	cvc     DECIMAL(3,0) NOT NULL,
 	expDate DATE   NOT NULL,
 	type    TEXT   NOT NULL -- visa, mastercard
