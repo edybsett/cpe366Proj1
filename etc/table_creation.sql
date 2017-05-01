@@ -68,7 +68,7 @@ CREATE TABLE HotelWideRates (
 CREATE TABLE Fees (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
-    price DECIMAL(6, 2) NOT NULL CHECK (price > 0)
+    price DECIMAL(6, 2) NOT NULL
 );
 
 CREATE TABLE ResXFee (
@@ -158,16 +158,11 @@ VALUES (101, 'ocean', 'single king', 100.00),
 	(512, 'pool', 'double queen', 100.00);
 -- Logins
 INSERT INTO Login(username, password, title)
-VALUES ('admin', 'admin', 'admin'),
-       ('asmith', '12345', 'customer');
--- Customer account for alice
-INSERT INTO Customer(cid, firstName, lastName, email, address)
-VALUES (2, 'alice', 'smith', 'asmith@gmail.com', '123 South Street');
--- Banking for alice
-INSERT INTO Banking(cid, ccNum, cvc, expDate, type)
-VALUES (2, '1234-5678-1234', 234, '04-11-2017', 'visa');
+VALUES ('admin', 'admin', 'admin');
 
 -- Standard fee entries
+INSERT INTO Fees(id, name, price)
+VALUES (0, 'init', 0.00);
 INSERT INTO Fees(name, price)
 VALUES ('breakfast', 10.00), 
     ('wifi', 20.00), 

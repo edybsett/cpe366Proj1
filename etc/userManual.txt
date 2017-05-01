@@ -1,0 +1,40 @@
+
+Project 1 User Manual
+Group: Butterfly Falcons
+
+Starting Information
+    Initially there is one admin with username and password = admin.
+
+Admin Usage
+    Show Employee List
+        Show a list of all employees. From here the admin can create a new 
+        employee or see and change their passwords.
+    Show Special Rates
+        Shows all special rates for the hotel and allows creation or deletion
+        of rates. To add a special rate, enter the start and end dates as well
+        as the new room price. To make a hotel-wide rate, leave the room number
+        blank. To delete a rate, enter its information and check the delete box.
+    Change Room Base Prices
+        This page lists all room prices and allows you to change the base price
+        of the room. To change the price of one room, enter a room number and 
+        the new price. To change the price of a particular view and bed type,
+        enter those instead. To change all beds and types, check the box.
+    Create Customer
+        Links directly to the registration page. Will probably log admin out.
+    Show Admin List
+        Shows all admins. Allows creation of new admin and changing of 
+        passwords.
+
+Employee Usage
+    This page lists all reservations in the database. From here the employee
+    can check in/out customers or delete reservations. At the bottom of the page
+    an employee can add charges to a reservation. Upon checkout, a bill is 
+    displayed.
+
+Customer Usage
+    This page lists all the customer's reservations and allows them to cancel 
+    one or create a new one.
+    Make Reservation
+        Here the user can see all available rooms for specified dates. To create
+        a reservation, select a bed and view type and the date range, and you
+        will be taken to a checkout page with a summary of the reservation.
