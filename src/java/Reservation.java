@@ -44,8 +44,8 @@ public class Reservation implements Serializable {
     private float basecost; 
     private boolean checkedIn;
     private int resIdForBill;
-    private String bed;
-    private String view;
+    private String bed = "single king";
+    private String view = "ocean";
     private UIInput residUI = new UIInput();
     private List<SpecialRates> sRates = new ArrayList<SpecialRates>();
    

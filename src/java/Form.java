@@ -290,7 +290,7 @@ public class Form {
         PreparedStatement preparedStatement = con.prepareStatement("Insert into Customer values(?,?,?,?,?)");
         preparedStatement.setInt(1, id);
         preparedStatement.setString(2, getFirstName());
-        preparedStatement.setString(3, getFirstName());
+        preparedStatement.setString(3, getLastName());
         preparedStatement.setString(4, getAddress());
         preparedStatement.setString(5, getEmail());
         preparedStatement.executeUpdate();
