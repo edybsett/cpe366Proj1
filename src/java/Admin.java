@@ -38,6 +38,10 @@ public class Admin {
         return "showEmployeeInfo";
     }
     
+    public String showAdminInfo() {
+        return "showAdminInfo";
+    }
+    
     public String addEmployee(){
         return "addEmployee";
     }
@@ -52,6 +56,10 @@ public class Admin {
     
     public String showEmployeeList(){
         return "showEmployeeList";
+    }
+    
+    public String showAdminList(){
+        return "showAdminList";
     }
     
     public String showSpecialRates(){

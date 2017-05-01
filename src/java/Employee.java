@@ -140,9 +140,9 @@ public class Employee {
             throw new SQLException("could not connect to DB");
         }
         
-        String q = "SELECT id, firstName, lastName, username, password ";
-        q       += "FROM Login, Employee WHERE title='employee' ";
-        q       += "AND id = eid ORDER BY id";
+        String q = "SELECT e.id, firstName, lastName, username, password ";
+        q       += "FROM Login l, Employee e WHERE title='employee' ";
+        q       += "AND e.id = l.id ORDER BY e.id";
         PreparedStatement ps = con.prepareStatement(q);
         ResultSet result = ps.executeQuery();
         List<Employee> ret = new ArrayList<Employee>();
