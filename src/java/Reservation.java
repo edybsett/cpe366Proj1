@@ -542,7 +542,7 @@ public class Reservation implements Serializable {
                         "from reservation r, customer c, \n" +
                         "    (SELECT sum(price), Reservation.resId FROM Reservation, Fees, ResXFee\n" +
                         "      where Reservation.resId = ResXFee.resId AND\n" +
-                        "      feeId = Fees.id group by Reservation.resId) f\n" +
+                        "      feeId = Fees.id group by Reservation.resId) f \n" +
                         "where r.custid = c.cid and r.resid = f.resid;");
 
         //get customer data from database
