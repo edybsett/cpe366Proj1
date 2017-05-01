@@ -42,6 +42,7 @@ public class Customer implements Serializable {
     private String lastName;
     private String address;
     private String email;
+    private float cost;
     
     private String view;
     private String bed;
@@ -53,6 +54,13 @@ public class Customer implements Serializable {
     
     private boolean checked;
 
+    public float getCost() {
+        return cost;
+    }
+    
+    public void setCost(float cost) {
+        this.cost = cost;
+    }
     
     public boolean getChecked(){
         return checked;
@@ -273,7 +281,15 @@ public class Customer implements Serializable {
                 cust.setBed(result2.getString("bed"));
                 cust.setView(result2.getString("view"));
             }
+            PreparedStatement ps3 = con.prepareStatement("select r.basecost, CASE WHEN f.sum = NULL THEN 0 ELSE f.sum END as fees from reservation r, customer c, (SELECT sum(price), Reservation.resId FROM Reservation, Fees, ResXFee where Reservation.resId = ResXFee.resId AND feeId = Fees.id group by Reservation.resId) f \n" +
+"where r.custid = c.cid and r.resid = f.resid and r.resid = " + cust.getResid() +";");
+            System.out.println("resdddd" + cust.getResid());
+            ResultSet result3 = ps3.executeQuery();
+            while(result3.next()) {
+                cust.setCost(result3.getFloat("basecost") + result3.getFloat("fees"));
+            }
             result2.close();
+            result3.close();
             //store all data into a List
             list.add(cust);
         }
