@@ -197,7 +197,7 @@ public class Customer implements Serializable {
         PreparedStatement preparedStatement = con.prepareStatement("Insert into Customer values(?,?,?,?,?)");
         preparedStatement.setInt(1, cid);
         preparedStatement.setString(2, firstName);
-        preparedStatement.setString(3, firstName);
+        preparedStatement.setString(3, lastName);
         preparedStatement.setString(4, address);
         preparedStatement.setString(5, email);
         preparedStatement.executeUpdate();
