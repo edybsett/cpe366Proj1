@@ -341,7 +341,7 @@ public class Customer implements Serializable {
             throw new SQLException("Can't get database connection");
         }
         con.setAutoCommit(false);
-        PreparedStatement ps1 = con.prepareStatement("delete from resxfee rf where (select r.resid from resxfee rf, reservation r where r.custid = " + login.getLid() + "  AND r.resid = rf.resid AND r.resid = " + resid + " LIMIT 1) = rf.resid ;");
+        PreparedStatement ps1 = con.prepareStatement("delete from resxfee rf where (select r.resid from resxfee rf, reservation r where r.custid = " + login.getLid() + "  AND r.resid = rf.resid AND r.resid = " + resid + " AND r.checkedin = false LIMIT 1) = rf.resid ;");
         ps1.executeUpdate();
         PreparedStatement ps = con.prepareStatement( "DELETE FROM reservation where resid = " + resid + " AND custid = " + login.getLid() + " AND checkedin = false;");
         ps.executeUpdate();
