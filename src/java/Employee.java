@@ -140,14 +140,14 @@ public class Employee {
             throw new SQLException("could not connect to DB");
         }
         
-        String q = "SELECT e.id, firstName, lastName, username, password ";
+        String q = "SELECT e.eid, firstName, lastName, username, password ";
         q       += "FROM Login l, Employee e WHERE title='employee' ";
-        q       += "AND e.id = l.id ORDER BY e.id";
+        q       += "AND e.eid = l.id ORDER BY e.eid";
         PreparedStatement ps = con.prepareStatement(q);
         ResultSet result = ps.executeQuery();
         List<Employee> ret = new ArrayList<Employee>();
         while (result.next()) {
-            Employee emp = new Employee(result.getInt("id"), 
+            Employee emp = new Employee(result.getInt("eid"), 
                     result.getString("username"),
             result.getString("password"));
             emp.setFirstName(result.getString("firstName"));
