@@ -206,6 +206,8 @@ public class Form {
     
     
     public String createEmployee() throws SQLException, ParseException {
+        if (checkUsernameTaken())
+            return null;
        Connection con = dbConnect.getConnection();
        PreparedStatement ps;
        String query;
@@ -252,7 +254,8 @@ public class Form {
     }
     
       public String createAdmin() throws SQLException, ParseException {
-          
+       if (checkUsernameTaken())
+           return null;
        Connection con = dbConnect.getConnection();
 
         if (con == null) {
@@ -320,6 +323,8 @@ public class Form {
     }
     
     public String createLogin() throws SQLException, ParseException {
+        if (checkUsernameTaken())
+            return null;
        Connection con = dbConnect.getConnection();
 
         if (con == null) {
@@ -355,7 +360,7 @@ public class Form {
         return createCustomer();
     }
     
-    public void checkUsernameTaken(FacesContext context, UIComponent component, Object value)
+    public boolean checkUsernameTaken()
             throws ValidatorException, SQLException {
         Connection con = dbConnect.getConnection();
 
@@ -369,10 +374,7 @@ public class Form {
         prepedId.setString(1, username);
         ResultSet result = prepedId.executeQuery();
         // Invalid username if it exists
-        if (result.next()) {
-            FacesMessage errorMessage = new FacesMessage("Username taken");
-            throw new ValidatorException(errorMessage);
-        }
+        return result.next();
     }
     
     
